@@ -1,11 +1,22 @@
 Package: noisemaker
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Simulate population correlation matrices with model error
+Version: 0.0.0.9000
+Author@R: person("Justin", "Kracht", email = "justin.kracht@pm.me",
+  role = c("aut", "cre"))
+Description: Tools to simulate population correlation matrices with various
+    types of model error for factor analysis models. Given a factor analysis
+    model, users are able to generate population correlation matrices with model
+    error using the methods of Tucker, Koopman, and Linn (TKL; 1969), Cudeck and 
+    Browne (CB; 1992), or Wu and Browne (WB; 2015). Users are able to specify 
+    a desired RMSEA value when using the CB or WB methods. When using the TKL
+    method, users can specify target RMSEA and CFI values and an optimization
+    procedure will seek to find a population correlation matrix with RMSEA
+    and/or CFI values that are as close as possible to the target values.
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    fungible (>=1.97),
+    MBESS (>=4.80),
+    sem (>=3.1-11)
