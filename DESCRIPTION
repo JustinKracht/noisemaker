@@ -17,6 +17,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    fungible (>=1.97),
-    MBESS (>=4.80),
-    sem (>=3.1-11)
+    fungible (>= 1.97),
+    MBESS (>= 4.8.0),
+    sem (>= 3.1-11)
+RoxygenNote: 7.1.1
