@@ -21,8 +21,13 @@ and Browne (1992).
 \examples{
 set.seed(42)
 mod <- fungible::simFA()
-Sigma <- cb(target_rmsea = 0.05,
-            mod = mod)
+Sigma <- cb(
+  target_rmsea = 0.05,
+  mod = mod
+)
 # Verify the result
 rmsea(Sigma, mod$Rpop, k = ncol(mod$loadings))
+}
+\references{
+Cudeck, R., & Browne, M. W. (1992). Constructing a covariance matrix that yields a specified minimizer and a specified minimum discrepancy function value. \emph{Psychometrika}, \emph{57}(3), 357–369. \url{https://doi.org/10/cq6ckd}
 }

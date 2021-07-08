@@ -25,18 +25,17 @@
 obj_func <- function(par = c(v, eps),
                      Rpop, W, p, u, df,
                      target_rmsea, target_cfi,
-                     weights = c(1,1),
+                     weights = c(1, 1),
                      ModelErrorType = NULL,
                      WmaxLoading = NULL,
                      NWmaxLoading = 2,
                      penalty = NULL,
                      return_values = FALSE) {
-
   v <- par[1] # error variance
   eps <- par[2] # epsTKL
 
   # Rescale W using eps
-  scaling_matrix <- diag((1-eps)^(0:(ncol(W)-1)))
+  scaling_matrix <- diag((1 - eps)^(0:(ncol(W) - 1)))
   W <- W %*% scaling_matrix
 
   # Create W matrix such that the proportion of unique variance accounted for by
@@ -64,7 +63,7 @@ obj_func <- function(par = c(v, eps),
 
   # Compute RMSEA and CFI values
   # Adapted from simFA() (lines 651--660)
-  rmsea <- sqrt(Ft/df)
+  rmsea <- sqrt(Ft / df)
   cfi <- 1 - (Ft / -log(det(RpopME)))
 
   # Define penalty if WmaxLoading and NWmaxLoading are defined
@@ -90,13 +89,15 @@ obj_func <- function(par = c(v, eps),
   if (return_values == FALSE) {
     fn_value
   } else {
-    list(fn_value = fn_value,
-         Rpop = Rpop,
-         RpopME = RpopME,
-         W = W,
-         rmsea = rmsea,
-         cfi = cfi,
-         v = v,
-         eps = eps)
+    list(
+      fn_value = fn_value,
+      Rpop = Rpop,
+      RpopME = RpopME,
+      W = W,
+      rmsea = rmsea,
+      cfi = cfi,
+      v = v,
+      eps = eps
+    )
   }
 }

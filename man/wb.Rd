@@ -21,12 +21,13 @@ Browne (2015).
 \examples{
 set.seed(42)
 R <- fungible::simFA()$Rpop
-wb(target_rmsea = 0.05,
-   Omega = R)
-
+wb(
+  target_rmsea = 0.05,
+  Omega = R
+)
 }
 \references{
-\insertRef{wu2015}
+Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in a covariance structure as a random effect. \emph{Psychometrika}, \emph{80}(3), 571–600. \url{https://doi.org/10/gjrkc4}
 }
 \author{
 Justin Kracht <krach018@umn.edu>

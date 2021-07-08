@@ -4,83 +4,54 @@
 \alias{tkl}
 \title{Optimize TKL parameters to find a solution with target RMSEA and CFI values}
 \usage{
-tkl(
-  L,
-  Phi,
-  target_rmsea,
-  target_cfi,
-  weights = c(1, 1),
-  v_start = 0.1,
-  eps_start = 0.02,
-  NMinorFac = 50,
-  ModelErrorType = "U",
-  WmaxLoading = NULL,
-  NWmaxLoading = 2,
-  debug = FALSE,
-  penalty = 500,
-  optim_type = "ga",
-  seed = NULL,
-  ncores = FALSE
-)
+tkl(mod, target_rmsea, target_cfi, tkl_ctrl = list())
 }
 \arguments{
-\item{L}{(matrix) Matrix of major common factor loadings.}
-
-\item{Phi}{(matrix) Major common factor correlation matrix.}
+\item{mod}{A \code{fungible::simFA()} model object.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 
 \item{target_cfi}{(scalar) Target CFI value.}
 
-\item{weights}{(vector) Vector of length two indicating how much weight to
-give RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight to both
-indices; `c(1,0)` ignores the CFI value.}
-
-\item{v_start}{(scalar) Starting value to use for \eqn{\upsilon}, the
-proportion of uniqueness variance reallocated to the minor common factors.}
-
-\item{eps_start}{(scalar) Starting value to use for \eqn{\epsilon}, which
-controls how common variance is distributed among the minor common factors.}
-
-\item{ModelErrorType}{(character) "U" or "V", as defined in `simFA()`.}
-
-\item{WmaxLoading}{(scalar) Threshold value for `NWmaxLoading`.}
-
-\item{NWmaxLoading}{(scalar) Maximum number of absolute loadings \eqn{\ge}
-`WmaxLoading` in any column of \eqn{W}.}
-
-\item{penalty}{(scalar) Penalty applied to objective function if the
-NmaxLoading condition isn't satisfied.}
-
-\item{optim_type}{(character)  Which optimization function to use, `optim` or
-`ga`? `optim()` is faster, but might not converge in some cases.}
-
-\item{seed}{(scalar) seed for reproducibility.}
-
-\item{ncores}{(boolean/scalar) Controls whether `ga()` optimization is done in
-parallel. If `TRUE`, uses the maximum available number of processor cores. If
-`FALSE`, does not use parallel processing. If an integer is provided, that's
-how many processor cores will be used (if available).}
-
-\item{W}{(matrix) Matrix of provisional minor common factor loadings with
-unit column variances.}
-
-\item{NminorFac}{(scalar) Number of minor common factors.}
+\item{tkl_ctrl}{(list) A control list containing the following TKL-specific
+arguments:
+\itemize{
+\item weights (vector) Vector of length two indicating how much weight to
+give RMSEA and CFI, e.g., \code{c(1,1)} (default) gives equal weight to both
+indices; \code{c(1,0)} ignores the CFI value.
+\item v_start (scalar) Starting value to use for \eqn{\upsilon}, the
+proportion of uniqueness variance reallocated to the minor common factors.
+\item eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
+controls how common variance is distributed among the minor common factors.
+\item NminorFac (scalar) Number of minor common factors.
+\item ModelErrorType (character) "U" or "V", as defined in \code{simFA()}.
+\item WmaxLoading (scalar) Threshold value for \code{NWmaxLoading}.
+\item NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
+\code{WmaxLoading} in any column of \eqn{W}.
+\item penalty (scalar) Penalty applied to objective function if the
+NmaxLoading condition isn't satisfied.
+\item optim_type (character)  Which optimization function to use, \code{optim} or
+\code{ga}? \code{optim()} is faster, but might not converge in some cases.
+\item ncores (boolean/scalar) Controls whether \code{ga()} optimization is done in
+parallel. If \code{TRUE}, uses the maximum available number of processor cores. If
+\code{FALSE}, does not use parallel processing. If an integer is provided, that's
+how many processor cores will be used (if available).
+}}
 }
 \description{
 Find the optimal W matrix such that the RMSEA and CFI values are as close as
 possible to the user-specified target values.
 }
 \examples{
+set.seed(42)
 mod <- fungible::simFA()
-tkl_opt(
-  L = mod$loadings,
-  Phi = mod$Phi,
+tkl(
+  mod = mod,
   target_rmsea = 0.05,
   target_cfi = 0.95,
-  WmaxLoading = .35,
-  NWmaxLoading = 3,
-  optim_type = "optim",
-  seed = 123
+  tkl_ctrl = list(optim_type = "optim")
 )
+}
+\references{
+Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation of factor analytic research procedures by means of simulated correlation matrices. \emph{Psychometrika}, \emph{34}(4), 421–459. \url{https://doi.org/10/chcxvf}
 }

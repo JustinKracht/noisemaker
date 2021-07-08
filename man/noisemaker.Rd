@@ -7,14 +7,19 @@
 noisemaker(
   mod,
   method = c("TKL", "CB", "WB"),
-  rmsea = NULL,
-  cfi = NULL,
-  weights = c(rmsea = 0.5, cfi = 0.5),
-  start_vals = c(v = 0.1, eps = 0.01)
+  target_rmsea = 0.05,
+  target_cfi = NULL,
+  tkl_ctrl = list()
 )
 }
 \arguments{
 \item{mod}{A `fungible::simFA()` model object.}
+
+\item{target_rmsea}{(scalar) Target RMSEA value.}
+
+\item{target_cfi}{(scalar) Target CFI value.}
+
+\item{tkl_ctrl}{(list) See ##### HELP FILE FOR TKL() #####}
 }
 \value{
 
@@ -29,5 +34,14 @@ optimization procedure finds a solution that produces RMSEA and/or CFI values
 that are close to the user-specified values.
 }
 \examples{
-noisemaker()
+set.seed(42)
+noisemaker(mod, method = "TKL",
+           target_rmsea = 0.05,
+           target_cfi = 0.95,
+           tkl_ctrl = list(optim_type = "optim"))
+noisemaker(mod, method = "CB",
+           target_rmsea = 0.05)
+noisemaker(mod,
+           method = "WB",
+           target_rmsea = 0.05)
 }

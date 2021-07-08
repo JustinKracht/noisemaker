@@ -2,14 +2,16 @@
 % Please edit documentation in R/rmsea.R
 \name{rmsea}
 \alias{rmsea}
-\title{Calculate RMSEA between two correlation/covariance matrices}
+\title{Calculate RMSEA between two correlation matrices}
 \usage{
 rmsea(Sigma, Omega, k)
 }
 \arguments{
-\item{Sigma}{(matrix) Population correlation or covariance matrix (with model error).}
+\item{Sigma}{(matrix) Population correlation or covariance matrix (with model
+error).}
 
-\item{Omega}{(matrix) Model-implied population correlation or covariance matrix.}
+\item{Omega}{(matrix) Model-implied population correlation or covariance
+matrix.}
 
 \item{k}{(scalar) Number of major common factors.}
 
@@ -19,13 +21,23 @@ rmsea(Sigma, Omega, k)
 
 }
 \description{
-Calculate RMSEA between two correlation/covariance matrices
+Given two correlation matrices of the same dimension, calculate the RMSEA
+value using the degrees of freedom for the exploratory factor analysis model
+(see details).
+}
+\details{
+Note that this function uses the degrees of freedom for an
+exploratory factor analysis model: \deqn{df = p(p-1)/2-(pk)+k(k-1)/2,}
+where \eqn{p} is the number of items and \eqn{k} is the number of major
+factors.
 }
 \examples{
 set.seed(42)
-mod <- fungible::simFA()
+mod <- fungible::simFA(Model = list(NFac = 3))
 Omega <- mod$Rpop
-Sigma <- wu_browne(target_rmsea = 0.05,
-                   Omega = Omega)
-rmsea(Sigma, Omega)
+Sigma <- cb(
+  target_rmsea = 0.05,
+  mod = mod
+)
+rmsea(Sigma, Omega, k = 3)
 }
