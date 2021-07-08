@@ -2,7 +2,7 @@ Package: noisemaker
 Type: Package
 Title: Simulate population correlation matrices with model error
 Version: 0.0.0.9000
-Author@R: person("Justin", "Kracht", email = "justin.kracht@pm.me",
+Author@R: person("Justin", "Kracht", email = "krach018@umn.edu",
   role = c("aut", "cre"))
 Description: Tools to simulate population correlation matrices with various
     types of model error for factor analysis models. Given a factor analysis
@@ -18,6 +18,11 @@ Encoding: UTF-8
 LazyData: true
 Imports: 
     fungible (>= 1.97),
+    GA (>= 3.2.1),
     MBESS (>= 4.8.0),
+    MCMCpack (>= 1.5.0),
     sem (>= 3.1-11)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

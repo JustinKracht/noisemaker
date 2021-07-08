@@ -7,7 +7,7 @@
 semify(mod)
 }
 \arguments{
-\item{mod}{A fungible::simFA() model object}
+\item{mod}{A `fungible::simFA()` model object.}
 }
 \value{
 

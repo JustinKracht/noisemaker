@@ -1,6 +1,6 @@
 #' Generate an sem model from a simFA model object
 #'
-#' @param mod A fungible::simFA() model object
+#' @param mod A `fungible::simFA()` model object.
 #'
 #' @return
 #' @export
