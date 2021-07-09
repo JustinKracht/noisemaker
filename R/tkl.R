@@ -53,8 +53,8 @@
 #' @export
 #' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation
 #'   of factor analytic research procedures by means of simulated correlation
-#'   matrices. \emph{Psychometrika}, \emph{34}(4), 421–459.
-#'   \url{https://doi.org/10/chcxvf}
+#'   matrices. *Psychometrika*, *34*(4), 421–459.
+#'   <https://doi.org/10/chcxvf>
 
 tkl <- function(mod,
                 target_rmsea = NULL,

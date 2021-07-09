@@ -8,8 +8,8 @@
 #'
 #' @author Justin Kracht <krach018@umn.edu>
 #' @references Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in
-#'   a covariance structure as a random effect. \emph{Psychometrika},
-#'   \emph{80}(3), 571–600. \url{https://doi.org/10/gjrkc4}
+#'   a covariance structure as a random effect. *Psychometrika*,
+#'   *80*(3), 571–600. <https://doi.org/10/gjrkc4>
 #'
 #' @export
 #' @details The Wu and Browne method generates a correlation matrix with model
@@ -19,8 +19,8 @@
 #'
 #'   where \eqn{m ~= 1/\epsilon^2} is a precision parameter related to
 #'   RMSEA (\eqn{\epsilon}) and \eqn{IW(m, m \Omega)} denotes an
-#'   inverse Wishart distribution. Note that \emph{there is no guarantee that
-#'   the RMSEA will be very close to the target RMSEA}, particularly when the
+#'   inverse Wishart distribution. Note that *there is no guarantee that
+#'   the RMSEA will be very close to the target RMSEA*, particularly when the
 #'   target RMSEA value is large. Based on experience, the method tends to give
 #'   solutions with RMSEA values that are larger than the target RMSEA values.
 #'   Therefore, it might be worth using a target RMSEA value that is somewhat

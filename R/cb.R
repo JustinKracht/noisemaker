@@ -6,7 +6,7 @@
 #' @param mod A `fungible::simFA()` model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @export
-#' @references Cudeck, R., & Browne, M. W. (1992). Constructing a covariance matrix that yields a specified minimizer and a specified minimum discrepancy function value. \emph{Psychometrika}, \emph{57}(3), 357–369. \url{https://doi.org/10/cq6ckd}
+#' @references Cudeck, R., & Browne, M. W. (1992). Constructing a covariance matrix that yields a specified minimizer and a specified minimum discrepancy function value. *Psychometrika*, *57*(3), 357–369. <https://doi.org/10/cq6ckd>
 
 cb <- function(mod,
                target_rmsea) {

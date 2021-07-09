@@ -39,20 +39,20 @@ unit column variances.}
 \item{target_cfi}{(scalar) Target CFI value.}
 
 \item{weights}{(vector) Vector of length two indicating how much weight to
-give RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight to both
-indices; `c(1,0)` ignores the CFI value.}
+give RMSEA and CFI, e.g., \code{c(1,1)} (default) gives equal weight to both
+indices; \code{c(1,0)} ignores the CFI value.}
 
-\item{WmaxLoading}{(scalar) Threshold value for `NWmaxLoading`.}
+\item{WmaxLoading}{(scalar) Threshold value for \code{NWmaxLoading}.}
 
 \item{NWmaxLoading}{(scalar) Maximum number of absolute loadings \eqn{\ge}
-`WmaxLoading` in any column of `W`.}
+\code{WmaxLoading} in any column of \code{W}.}
 
 \item{penalty}{(scalar) Large (positive) penalty value to apply if the NWmaxLoading condition is violated.}
 
-\item{return_values}{(boolean) If `TRUE`, return the objective function value
-along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If `FALSE`, return
+\item{return_values}{(boolean) If \code{TRUE}, return the objective function value
+along with \code{Rpop}, \code{RpopME}, \code{W}, \code{RMSEA}, \code{CFI}, \code{v}, and \code{eps} values. If \code{FALSE}, return
 only the objective function value.}
 }
 \description{
-This is the objective function that is minimized by the `tkl()` function.
+This is the objective function that is minimized by the \code{tkl()} function.
 }

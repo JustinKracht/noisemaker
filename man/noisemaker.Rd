@@ -13,7 +13,7 @@ noisemaker(
 )
 }
 \arguments{
-\item{mod}{A `fungible::simFA()` model object.}
+\item{mod}{A \code{fungible::simFA()} model object.}
 
 \item{method}{(character) Model error method to use ("TKL", "CB", or "WB").}
 
@@ -22,7 +22,7 @@ noisemaker(
 \item{target_cfi}{(scalar) Target CFI value.}
 
 \item{tkl_ctrl}{(list) A control list containing the following TKL-specific
-arguments. See the `tkl()` help file for more details.}
+arguments. See the \code{tkl()} help file for more details.}
 }
 \value{
 A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL parameters (if applicable).

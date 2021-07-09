@@ -7,7 +7,7 @@
 cb(mod, target_rmsea)
 }
 \arguments{
-\item{mod}{A `fungible::simFA()` model object.}
+\item{mod}{A \code{fungible::simFA()} model object.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 }
