@@ -19,22 +19,24 @@ noisemaker(
 
 \item{target_cfi}{(scalar) Target CFI value.}
 
-\item{tkl_ctrl}{(list) See ##### HELP FILE FOR TKL() #####}
+\item{tkl_ctrl}{(list) A control list containing the following TKL-specific
+arguments. See the `tkl()` help file for more details.}
 }
 \value{
 
 }
 \description{
-This tool lets the user generate a population correlation matrix with
-model error using one of three methods: (1) the Tucker, Koopman, and
-Linn (TKL; 1969) method, (2) the Cudeck and Browne (CB; 1992) method, or
-(3) the Wu and Browne (WB; 2015) method. If the CB or WB methods are used,
-the user can specify the desired RMSEA value. If the TKL method is used, an
-optimization procedure finds a solution that produces RMSEA and/or CFI values
-that are close to the user-specified values.
+This tool lets the user generate a population correlation matrix with model
+error using one of three methods: (1) the Tucker, Koopman, and Linn (TKL;
+1969) method, (2) the Cudeck and Browne (CB; 1992) method, or (3) the Wu and
+Browne (WB; 2015) method. If the CB or WB methods are used, the user can
+specify the desired RMSEA value. If the TKL method is used, an optimization
+procedure finds a solution that produces RMSEA and/or CFI values that are
+close to the user-specified values.
 }
 \examples{
 set.seed(42)
+mod <- fungible::simFA()
 noisemaker(mod, method = "TKL",
            target_rmsea = 0.05,
            target_cfi = 0.95,

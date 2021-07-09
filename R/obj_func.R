@@ -89,6 +89,7 @@ obj_func <- function(par = c(v, eps),
   if (return_values == FALSE) {
     fn_value
   } else {
+    names(fn_value) <- names(v) <- names(eps) <- NULL
     list(
       fn_value = fn_value,
       Rpop = Rpop,

@@ -4,12 +4,12 @@
 \alias{cb}
 \title{Cudeck & Browne (1992) model error method}
 \usage{
-cb(target_rmsea, mod)
+cb(mod, target_rmsea)
 }
 \arguments{
-\item{target_rmsea}{(scalar) Target RMSEA value.}
-
 \item{mod}{A `fungible::simFA()` model object.}
+
+\item{target_rmsea}{(scalar) Target RMSEA value.}
 }
 \value{
 
@@ -22,8 +22,8 @@ and Browne (1992).
 set.seed(42)
 mod <- fungible::simFA()
 Sigma <- cb(
-  target_rmsea = 0.05,
-  mod = mod
+  mod = mod,
+  target_rmsea = 0.05
 )
 # Verify the result
 rmsea(Sigma, mod$Rpop, k = ncol(mod$loadings))

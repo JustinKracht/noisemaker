@@ -25,8 +25,8 @@ set.seed(42)
 mod <- fungible::simFA(Model = list(NFac = 3))
 Omega <- mod$Rpop
 Sigma <- cb(
-  target_rmsea = 0.05,
-  Omega = Omega
+  mod = mod,
+  target_rmsea = 0.05
 )
 cfi(Sigma, Omega)
 }

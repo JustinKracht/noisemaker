@@ -3,8 +3,8 @@
 #' Generate a population correlation matrix using the model described in Cudeck
 #' and Browne (1992).
 #'
-#' @param target_rmsea (scalar) Target RMSEA value.
 #' @param mod A `fungible::simFA()` model object.
+#' @param target_rmsea (scalar) Target RMSEA value.
 #'
 #' @return
 #' @export
@@ -16,15 +16,25 @@
 #' set.seed(42)
 #' mod <- fungible::simFA()
 #' Sigma <- cb(
-#'   target_rmsea = 0.05,
-#'   mod = mod
+#'   mod = mod,
+#'   target_rmsea = 0.05
 #' )
 #' # Verify the result
 #' rmsea(Sigma, mod$Rpop, k = ncol(mod$loadings))
-cb <- function(target_rmsea,
-               mod) {
-  if (target_rmsea > 1 | target_rmsea < 0) {
-    stop("Target RMSEA value must be between 0 and 1.", call. = F)
+cb <- function(mod,
+               target_rmsea) {
+
+  if (target_rmsea < 0 | target_rmsea > 1) {
+    stop("The target RMSEA value must be a number between 0 and 1.\n",
+         crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+         target_rmsea, ".", call. = F)
+  }
+
+  if (!(is.list(mod)) |
+      is.null(mod$loadings) |
+      is.null(mod$Phi) |
+      is.null(mod$Rpop)) {
+    stop("`mod` must be a valid `simFA()` model object.", call. = F)
   }
 
   p <- nrow(mod$loadings)

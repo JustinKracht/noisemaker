@@ -25,17 +25,22 @@
 #' mod <- fungible::simFA(Model = list(NFac = 3))
 #' Omega <- mod$Rpop
 #' Sigma <- cb(
-#'   target_rmsea = 0.05,
-#'   mod = mod
+#'   mod = mod,
+#'   target_rmsea = 0.05
 #' )
 #' rmsea(Sigma, Omega, k = 3)
 rmsea <- function(Sigma, Omega, k) {
-  if (!all.equal(Sigma, t(Sigma))) {
-    stop("Error: Sigma must be a symmetric matrix.")
-  } else if (!all.equal(Omega, t(Omega))) {
-    stop("Error: Omega must be a symmetric matrix.")
-  } else if (!all.equal(dim(Omega), dim(Sigma))) {
-    stop("Error: Sigma and Omega must have the same dimensions.")
+  if (!is.matrix(Sigma) | !is.matrix(Omega)) {
+    stop("Sigma and Omega must be matrices.", call. = F)
+  } else if (all.equal(Sigma, t(Sigma)) != TRUE) {
+    stop("Sigma must be a symmetric matrix.", call. = F)
+  } else if (all.equal(Omega, t(Omega)) != TRUE) {
+    stop("Omega must be a symmetric matrix.", call. = F)
+  } else if (all.equal(dim(Omega), dim(Sigma)) != TRUE) {
+    stop("Sigma and Omega must have the same dimensions.", call. = F)
+  } else if (!is.numeric(k) | ((k %% 1) != 0) | k < 0) {
+    stop("`k` must be a non-negative integer.\n",
+         crayon::cyan("ℹ"), " You've specified ", k, " as `k`.", call. = F)
   }
 
   p <- nrow(Sigma)

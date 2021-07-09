@@ -43,12 +43,12 @@
 #'   tkl_ctrl = list(optim_type = "optim")
 #' )
 tkl <- function(mod,
-                target_rmsea,
-                target_cfi,
+                target_rmsea = NULL,
+                target_cfi = NULL,
                 tkl_ctrl = list()) {
 
   # Create default tkl_ctrl list; modify elements if changed by the user
-  tkl_ctrl_default <- list(weights = c(1,1),
+  tkl_ctrl_default <- list(weights = c(rmsea = 1, cfi = 1),
                            v_start = 0.1,
                            eps_start = 0.02,
                            NMinorFac = 50,
@@ -71,8 +71,22 @@ tkl <- function(mod,
   }
 
   # Check arguments
-  if (target_rmsea > 1 | target_rmsea < 0) {
-    stop("Target RMSEA value must be between 0 and 1.", call. = F)
+  if (!is.null(target_rmsea)) {
+    if (target_rmsea < 0 | target_rmsea > 1) {
+      stop("The target RMSEA value must be a number between 0 and 1.\n",
+           crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+           target_rmsea, ".", call. = F)
+    }
+  }
+  if (!is.null(target_cfi)) {
+    if (target_cfi > 1 | target_cfi < 0) {
+      stop("Target CFI value must be between 0 and 1\n",
+           crayon::cyan("ℹ"), " You've specified a target CFI value of ",
+           target_cfi, ".", call. = F)
+    }
+  }
+  if (is.null(target_cfi) & is.null(target_rmsea)) {
+    stop("Either target RMSEA or target CFI (or both) must be specified.")
   }
   if (eps_start < 0 | eps_start > 1) {
     stop("The value of eps_start must be between 0 and 1.", call. = F)
@@ -80,8 +94,62 @@ tkl <- function(mod,
   if (v_start < 0 | v_start > 1) {
     stop("The value of v_start must be between 0 and 1.", call. = F)
   }
+  if (!(is.list(mod)) |
+      is.null(mod$loadings) |
+      is.null(mod$Phi) |
+      is.null(mod$Rpop)) {
+    stop("`mod` must be a valid `simFA()` model object.", call. = F)
+  }
+  if (!is.numeric(weights) | length(weights) != 2) {
+    stop("`weights` must be a numeric vector of length two.", call. = F)
+  }
+  if (NMinorFac < 0) {
+    stop("The number of minor factors must be non-negative.\n",
+         crayon::cyan("ℹ"), " You've asked for ", NMinorFac,
+         " minor factors.", call. = F)
+  }
+  if (!(ModelErrorType %in% c("U", "V"))) {
+    stop("`ModelErrorType` must be either `U` or `V`\n",
+         crayon::cyan("ℹ"), " You've supplied ", ModelErrorType,
+         " as ModelErrorType.", call. = F)
+  }
+  if (!(optim_type %in% c("optim", "ga"))) {
+    stop("`optim_type` must be either `optim` or `ga`.\n",
+         crayon::cyan("ℹ"), " You've supplied ", optim_type,
+         " as `optim_type`.", call. = F)
+  }
+  if (!is.numeric(penalty) | penalty < 0) {
+    stop("`penalty` must be a postive number.\n",
+         crayon::cyan("ℹ"), " You've supplied ", penalty,
+         " as `penalty`.", call. = F)
+  }
+  if (!is.null(WmaxLoading)) {
+    if (!is.numeric(WmaxLoading) | WmaxLoading <= 0) {
+      stop("`WmaxLoading` must be a positive number.\n",
+           crayon::cyan("ℹ"), " You've supplied ", WmaxLoading,
+           " as `WmaxLoading`.", call. = F)
+    }
+  }
+  if (((NWmaxLoading %% 1) != 0) | NWmaxLoading < 0) {
+    stop("`NWmaxLoading` must be a non-negative integer.\n",
+         crayon::cyan("ℹ"), " You've supplied ", NWmaxLoading,
+         " as `NWmaxLoading`.", call. = F)
+  }
   if (mod$cn$ModelError$ModelError == TRUE) {
-    warning("The simFA object you provided includes model error parameters that will be ignored by this function.")
+    warning("The `simFA()` object you provided includes model error parameters that will be ignored by this function.")
+  }
+
+  # If no CFI value is given, set the weight to zero and set target_cfi to a
+  # no-null value (it will be ignored in the optimization)
+  if (is.null(target_cfi)) {
+    weights[2] <- 0
+    target_cfi <- 999
+  }
+
+  # Same for RMSEA
+  if (is.null(target_rmsea)) {
+    weights[1] <- 0
+    target_rmsea <- 999
   }
 
   L <- mod$loadings
@@ -157,8 +225,7 @@ tkl <- function(mod,
       maxiter = 1000,
       run = 100,
       parallel = ncores,
-      monitor = FALSE,
-      seed = seed
+      monitor = FALSE
     )
     par <- opt@solution[1, ]
   }

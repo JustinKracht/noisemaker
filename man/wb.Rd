@@ -4,12 +4,12 @@
 \alias{wb}
 \title{Wu & Browne model error method}
 \usage{
-wb(target_rmsea, Omega)
+wb(Omega, target_rmsea)
 }
 \arguments{
-\item{target_rmsea}{(scalar) Target RMSEA value.}
-
 \item{Omega}{(matrix) Model-implied population correlation matrix.}
+
+\item{target_rmsea}{(scalar) Target RMSEA value.}
 }
 \value{
 
@@ -22,8 +22,8 @@ Browne (2015).
 set.seed(42)
 R <- fungible::simFA()$Rpop
 wb(
-  target_rmsea = 0.05,
-  Omega = R
+  Omega = R,
+  target_rmsea = 0.05
 )
 }
 \references{

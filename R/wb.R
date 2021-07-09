@@ -3,8 +3,8 @@
 #' Generate a population correlation matrix using the model described in Wu and
 #' Browne (2015).
 #'
-#' @param target_rmsea (scalar) Target RMSEA value.
 #' @param Omega (matrix) Model-implied population correlation matrix.
+#' @param target_rmsea (scalar) Target RMSEA value.
 #'
 #' @return
 #' @export
@@ -16,15 +16,19 @@
 #' set.seed(42)
 #' R <- fungible::simFA()$Rpop
 #' wb(
-#'   target_rmsea = 0.05,
-#'   Omega = R
+#'   Omega = R,
+#'   target_rmsea = 0.05
 #' )
-wb <- function(target_rmsea,
-               Omega) {
-  if (target_rmsea > 1 | target_rmsea < 0) {
-    stop("Target RMSEA value must be between 0 and 1.", call. = F)
+wb <- function(Omega,
+               target_rmsea) {
+
+  if (!is.matrix(Omega)) stop("Omega must be a correlation matrix.")
+  if (target_rmsea < 0 | target_rmsea > 1) {
+    stop("The target RMSEA value must be a number between 0 and 1.\n",
+         crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+         target_rmsea, ".", call. = F)
   }
-  if (!all.equal(Omega, t(Omega))) {
+  if (all.equal(Omega, t(Omega)) != TRUE) {
     stop("Omega must be a symmetric correlation matrix.", call. = F)
   }
   if (any(eigen(Omega)$values < 0)) {

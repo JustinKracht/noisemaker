@@ -4,7 +4,7 @@
 \alias{tkl}
 \title{Optimize TKL parameters to find a solution with target RMSEA and CFI values}
 \usage{
-tkl(mod, target_rmsea, target_cfi, tkl_ctrl = list())
+tkl(mod, target_rmsea = NULL, target_cfi = NULL, tkl_ctrl = list())
 }
 \arguments{
 \item{mod}{A \code{fungible::simFA()} model object.}
