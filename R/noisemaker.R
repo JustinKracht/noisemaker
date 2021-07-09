@@ -9,15 +9,19 @@
 #' close to the user-specified values.
 #'
 #' @param mod A `fungible::simFA()` model object.
+#' @param method (character) Model error method to use ("TKL", "CB", or "WB").
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
 #'   arguments. See the `tkl()` help file for more details.
 #'
-#' @return
+#' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL parameters (if applicable).
 #' @export
 #'
 #' @examples
+#' library(fungible)
+#' library(noisemaker)
+#'
 #' set.seed(42)
 #' mod <- fungible::simFA()
 #' noisemaker(mod, method = "TKL",
@@ -41,36 +45,36 @@ noisemaker <- function(mod,
   }
   if (!is.numeric(target_rmsea) & !is.null(target_rmsea)) {
     stop("Target RMSEA value must be a number or NULL.\n",
-         crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+         crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
          target_rmsea, ".", call. = F)
   }
   if (!is.numeric(target_cfi) & !is.null(target_cfi)) {
     stop("Target CFI value must be either a number or NULL.\n",
-         crayon::cyan("ℹ"), " You've specified a target CFI value of ",
+         crayon::cyan("\u2139"), " You've specified a target CFI value of ",
          target_cfi, ".", call. = F)
   }
   if (target_rmsea < 0 | target_rmsea > 1) {
     stop("The target RMSEA value must be a number between 0 and 1.\n",
-         crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+         crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
                       target_rmsea, ".", call. = F)
   }
   if (!is.null(target_cfi)) {
     if (target_cfi < 0 | target_cfi > 1) {
     stop("The target CFI value must be a number between 0 and 1.\n",
-         crayon::cyan("ℹ"), " You've specified a target CFI value of ",
+         crayon::cyan("\u2139"), " You've specified a target CFI value of ",
                       target_cfi, ".", call. = F)
     }
   }
   if (!is.null(target_cfi) & (method != "TKL")) {
     stop(
       "The TKL method must be used when a CFI value is specified.\n",
-      crayon::cyan("ℹ")," You've selected the ", method," method.\n",
-      crayon::cyan("ℹ")," You've specified a target CFI value of ", target_cfi, "."
+      crayon::cyan("\u2139")," You've selected the ", method," method.\n",
+      crayon::cyan("\u2139")," You've specified a target CFI value of ", target_cfi, "."
     )
   }
   if (!(method %in% c("TKL", "WB", "CB"))) {
     stop("`method` must be `TKL`, `CB`, or `WB`.\n",
-         crayon::cyan("ℹ"), " You've specified ",
+         crayon::cyan("\u2139"), " You've specified ",
          method, " as `method`.", call. = F)
   }
   if (!(is.list(mod)) |

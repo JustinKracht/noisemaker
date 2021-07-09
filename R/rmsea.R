@@ -8,7 +8,6 @@
 #'   error).
 #' @param Omega (matrix) Model-implied population correlation or covariance
 #'   matrix.
-#' @param df (scalar) Model degrees of freedom.
 #' @param k (scalar) Number of major common factors.
 #'
 #' @details Note that this function uses the degrees of freedom for an
@@ -17,17 +16,20 @@
 #'   factors.
 #'
 #' @md
-#' @return
 #' @export
 #'
 #' @examples
+#' library(fungible)
+#' library(noisemaker)
+#'
 #' set.seed(42)
 #' mod <- fungible::simFA(Model = list(NFac = 3))
 #' Omega <- mod$Rpop
-#' Sigma <- cb(
+#' Sigma <- noisemaker(
 #'   mod = mod,
+#'   method = "CB",
 #'   target_rmsea = 0.05
-#' )
+#' )$Sigma
 #' rmsea(Sigma, Omega, k = 3)
 rmsea <- function(Sigma, Omega, k) {
   if (!is.matrix(Sigma) | !is.matrix(Omega)) {
@@ -40,7 +42,7 @@ rmsea <- function(Sigma, Omega, k) {
     stop("Sigma and Omega must have the same dimensions.", call. = F)
   } else if (!is.numeric(k) | ((k %% 1) != 0) | k < 0) {
     stop("`k` must be a non-negative integer.\n",
-         crayon::cyan("ℹ"), " You've specified ", k, " as `k`.", call. = F)
+         crayon::cyan("\u2139"), " You've specified ", k, " as `k`.", call. = F)
   }
 
   p <- nrow(Sigma)

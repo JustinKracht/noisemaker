@@ -17,4 +17,5 @@ test_that("The function throws an error if the arguments aren't matrices or if t
   expect_error(cfi("a", "b"))
   expect_error(cfi(X, Y))
   expect_error(cfi(Y, Z))
+  expect_error(cfi(Z, Y))
 })

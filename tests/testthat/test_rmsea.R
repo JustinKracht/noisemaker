@@ -17,6 +17,7 @@ test_that("The function throws an error if the arguments aren't matrices or if t
   expect_error(rmsea("a", "b", k = 3))
   expect_error(rmsea(X, Y, k = 3))
   expect_error(rmsea(Y, Z, k = 3))
+  expect_error(rmsea(Z, Y, k = 3))
 })
 
 test_that("The function throws an error if k is not a non-negative integer", {

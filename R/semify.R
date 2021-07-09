@@ -2,7 +2,6 @@
 #'
 #' @param mod A `fungible::simFA()` model object.
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -43,7 +42,7 @@ semify <- function(mod) {
 
   # Specify latent variable correlations
   latent_cor_spec <- ""
-  var_pairs <- combn(1:3, 2)
+  var_pairs <- utils::combn(nrow(Phi), 2)
   latent_cor <- numeric(length = ncol(var_pairs))
   latent_cor_names <- character(length = ncol(var_pairs))
   for (pair in 1:ncol(var_pairs)) {

@@ -35,5 +35,5 @@ test_that("Function output has the expected dimension and type", {
 })
 
 test_that("RMSEA value is in the ballpark of the target RMSEA value", {
-  expect_true(abs(rmsea(Sigma, Omega, k = 3) - 0.05) < 0.05)
+  expect_true(abs(rmsea(Sigma, Omega, k = 3) - 0.05) < 0.1)
 })

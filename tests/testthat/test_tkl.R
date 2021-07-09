@@ -5,7 +5,6 @@ library(noisemaker)
 library(fungible)
 
 mod <- fungible::simFA()
-
 Sigma <- tkl(mod, target_rmsea = 0.05, target_cfi = 0.95)
 
 test_that("Errors are thrown when invalid target RMSEA or CFI values are given", {
@@ -26,8 +25,6 @@ test_that("Errors are thrown when invalid tkl_ctrl arguments are given", {
                    tkl_ctrl = list(v_start = 2)))
   expect_error(tkl(mod, target_rmsea = .05,
                    tkl_ctrl = list(eps_start = 2)))
-  expect_error(tkl(mod, target_rmsea = .05,
-                   tkl_ctrl = list(ModelErrorType = "A")))
   expect_error(tkl(mod, target_rmsea = .05,
                    tkl_ctrl = list(NMinorFac = -1)))
   expect_error(tkl(mod, target_rmsea = .05,

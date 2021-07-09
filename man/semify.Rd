@@ -9,9 +9,6 @@ semify(mod)
 \arguments{
 \item{mod}{A `fungible::simFA()` model object.}
 }
-\value{
-
-}
 \description{
 Generate an sem model from a simFA model object
 }

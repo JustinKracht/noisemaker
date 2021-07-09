@@ -26,6 +26,10 @@ test_that("Errors are thrown when invalid target RMSEA or CFI values are given",
   expect_error(noisemaker(mod, method = "TKL", target_cfi = 1.01))
   expect_error(noisemaker(mod, method = "CB",  target_cfi = 0.95))
   expect_error(noisemaker(mod, method = "WB",  target_cfi = 0.95))
+
+  expect_error(noisemaker(mod, method = "TKL", target_cfi = "a"))
+  expect_error(noisemaker(mod, method = "CB",  target_cfi = "a"))
+  expect_error(noisemaker(mod, method = "WB",  target_cfi = "a"))
 }
 )
 
@@ -41,4 +45,6 @@ test_that("An error is thrown if an invalid `simFA()` object is given", {
 test_that("A warning is given if a `simFA()` model is provided that includes model error", {
   mod3 <- simFA(ModelError = list(ModelError = TRUE))
   expect_warning(noisemaker(mod3, method = "WB"))
+  expect_warning(noisemaker(mod3, method = "CB"))
+  expect_warning(noisemaker(mod3, method = "TKL"))
 })

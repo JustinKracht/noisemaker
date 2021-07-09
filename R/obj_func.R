@@ -14,10 +14,10 @@
 #' @param weights (vector) Vector of length two indicating how much weight to
 #'   give RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight to both
 #'   indices; `c(1,0)` ignores the CFI value.
-#' @param ModelErrorType (character) "U" or "V", as defined in `simFA()`.
 #' @param WmaxLoading (scalar) Threshold value for `NWmaxLoading`.
 #' @param NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
 #'   `WmaxLoading` in any column of `W`.
+#' @param penalty (scalar) Large (positive) penalty value to apply if the NWmaxLoading condition is violated.
 #' @param return_values (boolean) If `TRUE`, return the objective function value
 #'   along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If `FALSE`, return
 #'   only the objective function value.
@@ -26,7 +26,6 @@ obj_func <- function(par = c(v, eps),
                      Rpop, W, p, u, df,
                      target_rmsea, target_cfi,
                      weights = c(1, 1),
-                     ModelErrorType = NULL,
                      WmaxLoading = NULL,
                      NWmaxLoading = 2,
                      penalty = NULL,
@@ -42,15 +41,8 @@ obj_func <- function(par = c(v, eps),
   # the minor common factors is v.
   # Adapted from simFA() (lines 691--698)
   wsq <- diag(tcrossprod(W))
-
-  if (ModelErrorType == "U") {
-    ModelErrorVar <- v * u
-  } else {
-    ModelErrorVar <- rep(v, p)
-  }
-
+  ModelErrorVar <- v * u
   W <- diag(sqrt(ModelErrorVar / wsq)) %*% W
-
   RpopME <- Rpop + tcrossprod(W)
   diag(RpopME) <- 1
 

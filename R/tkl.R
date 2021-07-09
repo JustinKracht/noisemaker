@@ -7,41 +7,55 @@
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
-#' arguments:
-#' * weights (vector) Vector of length two indicating how much weight to
-#'   give RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight to both
-#'   indices; `c(1,0)` ignores the CFI value.
-#' * v_start (scalar) Starting value to use for \eqn{\upsilon}, the
-#'   proportion of uniqueness variance reallocated to the minor common factors.
-#' * eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
+#'   arguments:
+#'   * weights (vector) Vector of length two indicating how much weight to give
+#'   RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight
+#'   to both indices; `c(1,0)` ignores the CFI value.
+#'   * v_start (scalar) Starting value to use for \eqn{\upsilon}, the proportion
+#'   of uniqueness variance reallocated to the minor common factors. Note that
+#'   only `v` as a proportion of the unique (not total) variance is supported
+#'   in this function.
+#'   * eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
 #'   controls how common variance is distributed among the minor common factors.
-#' * NminorFac (scalar) Number of minor common factors.
-#' * ModelErrorType (character) "U" or "V", as defined in `simFA()`.
-#' * WmaxLoading (scalar) Threshold value for `NWmaxLoading`.
-#' * NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
+#'   * NminorFac (scalar) Number of minor common factors.
+#'   * WmaxLoading (scalar) Threshold value for `NWmaxLoading`.
+#'   * NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
 #'   `WmaxLoading` in any column of \eqn{W}.
-#' * penalty (scalar) Penalty applied to objective function if the
-#'   NmaxLoading condition isn't satisfied.
-#' * optim_type (character)  Which optimization function to use, `optim` or
+#'   * penalty (scalar) Penalty applied to objective function if the
+#'   `NmaxLoading` condition isn't satisfied.
+#'   * optim_type (character)  Which optimization function to use, `optim` or
 #'   `ga`? `optim()` is faster, but might not converge in some cases.
-#' * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
-#'   parallel. If `TRUE`, uses the maximum available number of processor cores. If
-#'   `FALSE`, does not use parallel processing. If an integer is provided, that's
-#'   how many processor cores will be used (if available).
-#' @export
+#'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
+#'   parallel. If `TRUE`, uses the maximum available number of processor cores.
+#'   If `FALSE`, does not use parallel processing. If an integer is provided,
+#'   that's how many processor cores will be used (if available).
 #' @md
 #'
-#' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation of factor analytic research procedures by means of simulated correlation matrices. \emph{Psychometrika}, \emph{34}(4), 421–459. \url{https://doi.org/10/chcxvf}
+#' @details This function attempts to find optimal values of the TKL parameters
+#'   \eqn{\upsilon} and \eqn{\epsilon} such that the resulting correlation
+#'   matrix with model error (\eqn{\Sigma}) has population RMSEA and/or CFI
+#'   values that are close to the user-specified values. It is important to note
+#'   that solutions are not guaranteed to produce RMSEA and CFI values that are
+#'   reasonably close to the target values; in fact, some combinations of RMSEA
+#'   and CFI will be difficult or impossible to obtain for certain models (see
+#'   Lai & Green, 2016). It can be particularly difficult to find good solutions
+#'   when additional restrictions are placed on the minor factor loadings (i.e.,
+#'   using the `WmaxLoading` and `NWmaxLoading` arguments).
 #'
-#' @examples
-#' set.seed(42)
-#' mod <- fungible::simFA()
-#' tkl(
-#'   mod = mod,
-#'   target_rmsea = 0.05,
-#'   target_cfi = 0.95,
-#'   tkl_ctrl = list(optim_type = "optim")
-#' )
+#'   Optimization is fastest when the `optim_type = optim` optimization method
+#'   is chosen. This indicates that optimization should be done using the
+#'   `L-BFGS-B` algorithm implemented in the `optim()` function. However, this
+#'   method can sometimes fail to find a solution. In that case, I recommend
+#'   setting `optim_type = ga`, which indicates that a genetic algorithm
+#'   (implemented in `GA::ga()`) will be used. This method takes longer than
+#'   `optim()` but is more likely to find a solution.
+#'
+#' @export
+#' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation
+#'   of factor analytic research procedures by means of simulated correlation
+#'   matrices. \emph{Psychometrika}, \emph{34}(4), 421–459.
+#'   \url{https://doi.org/10/chcxvf}
+
 tkl <- function(mod,
                 target_rmsea = NULL,
                 target_cfi = NULL,
@@ -52,7 +66,6 @@ tkl <- function(mod,
                            v_start = 0.1,
                            eps_start = 0.02,
                            NMinorFac = 50,
-                           ModelErrorType = "U",
                            WmaxLoading = NULL,
                            NWmaxLoading = 2,
                            debug = FALSE,
@@ -74,14 +87,14 @@ tkl <- function(mod,
   if (!is.null(target_rmsea)) {
     if (target_rmsea < 0 | target_rmsea > 1) {
       stop("The target RMSEA value must be a number between 0 and 1.\n",
-           crayon::cyan("ℹ"), " You've specified a target RMSEA value of ",
+           crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
            target_rmsea, ".", call. = F)
     }
   }
   if (!is.null(target_cfi)) {
     if (target_cfi > 1 | target_cfi < 0) {
       stop("Target CFI value must be between 0 and 1\n",
-           crayon::cyan("ℹ"), " You've specified a target CFI value of ",
+           crayon::cyan("\u2139"), " You've specified a target CFI value of ",
            target_cfi, ".", call. = F)
     }
   }
@@ -105,38 +118,30 @@ tkl <- function(mod,
   }
   if (NMinorFac < 0) {
     stop("The number of minor factors must be non-negative.\n",
-         crayon::cyan("ℹ"), " You've asked for ", NMinorFac,
+         crayon::cyan("\u2139"), " You've asked for ", NMinorFac,
          " minor factors.", call. = F)
-  }
-  if (!(ModelErrorType %in% c("U", "V"))) {
-    stop("`ModelErrorType` must be either `U` or `V`\n",
-         crayon::cyan("ℹ"), " You've supplied ", ModelErrorType,
-         " as ModelErrorType.", call. = F)
   }
   if (!(optim_type %in% c("optim", "ga"))) {
     stop("`optim_type` must be either `optim` or `ga`.\n",
-         crayon::cyan("ℹ"), " You've supplied ", optim_type,
+         crayon::cyan("\u2139"), " You've supplied ", optim_type,
          " as `optim_type`.", call. = F)
   }
   if (!is.numeric(penalty) | penalty < 0) {
     stop("`penalty` must be a postive number.\n",
-         crayon::cyan("ℹ"), " You've supplied ", penalty,
+         crayon::cyan("\u2139"), " You've supplied ", penalty,
          " as `penalty`.", call. = F)
   }
   if (!is.null(WmaxLoading)) {
     if (!is.numeric(WmaxLoading) | WmaxLoading <= 0) {
       stop("`WmaxLoading` must be a positive number.\n",
-           crayon::cyan("ℹ"), " You've supplied ", WmaxLoading,
+           crayon::cyan("\u2139"), " You've supplied ", WmaxLoading,
            " as `WmaxLoading`.", call. = F)
     }
   }
   if (((NWmaxLoading %% 1) != 0) | NWmaxLoading < 0) {
     stop("`NWmaxLoading` must be a non-negative integer.\n",
-         crayon::cyan("ℹ"), " You've supplied ", NWmaxLoading,
+         crayon::cyan("\u2139"), " You've supplied ", NWmaxLoading,
          " as `NWmaxLoading`.", call. = F)
-  }
-  if (mod$cn$ModelError$ModelError == TRUE) {
-    warning("The `simFA()` object you provided includes model error parameters that will be ignored by this function.")
   }
 
   # If no CFI value is given, set the weight to zero and set target_cfi to a
@@ -179,7 +184,7 @@ tkl <- function(mod,
 
   if (optim_type == "optim") {
     if (debug == TRUE) ctrl <- list(trace = 5, REPORT = 1) else ctrl <- list()
-    opt <- optim(
+    opt <- stats::optim(
       par = start_vals,
       fn = obj_func,
       method = "L-BFGS-B",
@@ -193,7 +198,6 @@ tkl <- function(mod,
       target_rmsea = target_rmsea,
       target_cfi = target_cfi,
       weights = weights,
-      ModelErrorType = ModelErrorType,
       WmaxLoading = WmaxLoading,
       NWmaxLoading = NWmaxLoading,
       control = ctrl,
@@ -213,7 +217,6 @@ tkl <- function(mod,
           target_rmsea = target_rmsea,
           target_cfi = target_cfi,
           weights = weights,
-          ModelErrorType = ModelErrorType,
           WmaxLoading = WmaxLoading,
           NWmaxLoading = NWmaxLoading,
           penalty = penalty
@@ -240,7 +243,6 @@ tkl <- function(mod,
     target_rmsea = target_rmsea,
     target_cfi = target_cfi,
     weights = weights,
-    ModelErrorType = ModelErrorType,
     WmaxLoading = WmaxLoading,
     NWmaxLoading = NWmaxLoading,
     return_values = TRUE,

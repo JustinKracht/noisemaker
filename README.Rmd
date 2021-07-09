@@ -1,0 +1,60 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# noisemaker
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of noisemaker is to provide functions to make it easy to generate population correlation matrices that fit a common factor analysis model imperfectly. In particular, the `noisemaker()` function provides an interface to three methods for generating population correlation matrices with RMSEA and/or CFI values that are close to user-specified target values.
+
+## Installation
+
+You can install the development version from [GitHub](https://github.com/) with:
+
+```{r eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("krach018/noisemaker", 
+                         host = "https://github.umn.edu/api/v3")
+```
+
+## Example
+
+In this example, the factor model has two factors, each with three salient items. I'll demonstrate using the `noisemaker()` function to generate a population correlation matrix with model error ($\Sigma$) such that $\textrm{RMSEA}(\Sigma, \Omega) = 0.05$, where $\Omega$ is the model-implied correlation matrix. For this first example, I'll use the method described by [Cudeck and Browne (1992)](https://doi-org.ezp1.lib.umn.edu/10.1007/BF02295424).
+
+```{r example}
+library(noisemaker)
+library(fungible)
+
+set.seed(42)
+
+# Generate a simple factor model with two factors and six items
+mod <- simFA(Model = list(NFac = 2,
+                          NItemPerFac = 3))
+(Omega <- mod$Rpop) # the model-implied correlation matrix
+
+# Generate a population correlation matrix with model error (Sigma) using the
+# Cudeck and Browne (1992) method
+noisemaker(mod, method = "CB", target_rmsea = 0.05)
+```
+
+The `noisemaker()` function also implements a procedure that optimizes the values of the parameters for the [Tucker, Koopman, and Linn (1969)](https://doi-org.ezp1.lib.umn.edu/10.1007/BF02290601) method to produce a $\Sigma$ matrix that has both RMSEA and CFI values close to the user-specified targets:
+
+```{r}
+noisemaker(mod, method = "TKL", 
+           target_rmsea = 0.05, 
+           target_cfi = 0.95,
+           tkl_ctrl = list(optim_type = "optim"))
+```

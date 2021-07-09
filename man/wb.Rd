@@ -11,23 +11,29 @@ wb(Omega, target_rmsea)
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 }
-\value{
-
-}
 \description{
 Generate a population correlation matrix using the model described in Wu and
 Browne (2015).
 }
-\examples{
-set.seed(42)
-R <- fungible::simFA()$Rpop
-wb(
-  Omega = R,
-  target_rmsea = 0.05
-)
+\details{
+The Wu and Browne method generates a correlation matrix with model
+  error (\eqn{\Sigma}) using
+
+  \deqn{(\Sigma | \Omega) ~ IW(m, m \Omega),}
+
+  where \eqn{m ~= 1/\epsilon^2} is a precision parameter related to
+  RMSEA (\eqn{\epsilon}) and \eqn{IW(m, m \Omega)} denotes an
+  inverse Wishart distribution. Note that \emph{there is no guarantee that
+  the RMSEA will be very close to the target RMSEA}, particularly when the
+  target RMSEA value is large. Based on experience, the method tends to give
+  solutions with RMSEA values that are larger than the target RMSEA values.
+  Therefore, it might be worth using a target RMSEA value that is somewhat
+  lower than what is actually needed.
 }
 \references{
-Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in a covariance structure as a random effect. \emph{Psychometrika}, \emph{80}(3), 571–600. \url{https://doi.org/10/gjrkc4}
+Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in
+  a covariance structure as a random effect. \emph{Psychometrika},
+  \emph{80}(3), 571–600. \url{https://doi.org/10/gjrkc4}
 }
 \author{
 Justin Kracht <krach018@umn.edu>

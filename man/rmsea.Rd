@@ -14,11 +14,6 @@ error).}
 matrix.}
 
 \item{k}{(scalar) Number of major common factors.}
-
-\item{df}{(scalar) Model degrees of freedom.}
-}
-\value{
-
 }
 \description{
 Given two correlation matrices of the same dimension, calculate the RMSEA
@@ -32,12 +27,16 @@ where \eqn{p} is the number of items and \eqn{k} is the number of major
 factors.
 }
 \examples{
+library(fungible)
+library(noisemaker)
+
 set.seed(42)
 mod <- fungible::simFA(Model = list(NFac = 3))
 Omega <- mod$Rpop
-Sigma <- cb(
+Sigma <- noisemaker(
   mod = mod,
+  method = "CB",
   target_rmsea = 0.05
-)
+)$Sigma
 rmsea(Sigma, Omega, k = 3)
 }

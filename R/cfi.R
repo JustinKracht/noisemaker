@@ -8,17 +8,20 @@
 #' @param Omega (matrix) Model-implied population correlation or covariance
 #'   matrix.
 #'
-#' @return
 #' @export
 #'
 #' @examples
+#' library(fungible)
+#' library(noisemaker)
+#'
 #' set.seed(42)
 #' mod <- fungible::simFA(Model = list(NFac = 3))
 #' Omega <- mod$Rpop
-#' Sigma <- cb(
+#' Sigma <- noisemaker(
 #'   mod = mod,
+#'   method = "CB",
 #'   target_rmsea = 0.05
-#' )
+#' )$Sigma
 #' cfi(Sigma, Omega)
 cfi <- function(Sigma, Omega) {
   if (!is.matrix(Sigma) | !is.matrix(Omega)) {

@@ -13,20 +13,21 @@ error).}
 \item{Omega}{(matrix) Model-implied population correlation or covariance
 matrix.}
 }
-\value{
-
-}
 \description{
 Given two correlation matrices of the same dimension, calculate the CFI value
 value using the independence model as the null model.
 }
 \examples{
+library(fungible)
+library(noisemaker)
+
 set.seed(42)
 mod <- fungible::simFA(Model = list(NFac = 3))
 Omega <- mod$Rpop
-Sigma <- cb(
+Sigma <- noisemaker(
   mod = mod,
+  method = "CB",
   target_rmsea = 0.05
-)
+)$Sigma
 cfi(Sigma, Omega)
 }

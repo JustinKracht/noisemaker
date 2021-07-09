@@ -14,7 +14,6 @@ obj_func(
   target_rmsea,
   target_cfi,
   weights = c(1, 1),
-  ModelErrorType = NULL,
   WmaxLoading = NULL,
   NWmaxLoading = 2,
   penalty = NULL,
@@ -43,12 +42,12 @@ unit column variances.}
 give RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight to both
 indices; `c(1,0)` ignores the CFI value.}
 
-\item{ModelErrorType}{(character) "U" or "V", as defined in `simFA()`.}
-
 \item{WmaxLoading}{(scalar) Threshold value for `NWmaxLoading`.}
 
 \item{NWmaxLoading}{(scalar) Maximum number of absolute loadings \eqn{\ge}
 `WmaxLoading` in any column of `W`.}
+
+\item{penalty}{(scalar) Large (positive) penalty value to apply if the NWmaxLoading condition is violated.}
 
 \item{return_values}{(boolean) If `TRUE`, return the objective function value
 along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If `FALSE`, return

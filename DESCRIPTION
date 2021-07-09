@@ -2,8 +2,7 @@ Package: noisemaker
 Type: Package
 Title: Simulate population correlation matrices with model error
 Version: 0.0.0.9000
-Author@R: person("Justin", "Kracht", email = "krach018@umn.edu",
-  role = c("aut", "cre"))
+Authors@R: person("Justin", "Kracht", email = "krach018@umn.edu", role = c("aut", "cre"))
 Description: Tools to simulate population correlation matrices with various
     types of model error for factor analysis models. Given a factor analysis
     model, users are able to generate population correlation matrices with model
@@ -13,12 +12,14 @@ Description: Tools to simulate population correlation matrices with various
     method, users can specify target RMSEA and CFI values and an optimization
     procedure will seek to find a population correlation matrix with RMSEA
     and/or CFI values that are as close as possible to the target values.
-License: GPL (>= 3)
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
+    crayon (>= 1.4.1),
     fungible (>= 1.97),
     GA (>= 3.2.1),
+    MASS (>= 7.3.54),
     MBESS (>= 4.8.0),
     MCMCpack (>= 1.5.0),
     sem (>= 3.1-11)
