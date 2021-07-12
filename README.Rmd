@@ -27,8 +27,7 @@ You can install the development version from [GitHub](https://github.com/) with:
 
 ```{r eval=FALSE}
 # install.packages("devtools")
-devtools::install_github("krach018/noisemaker", 
-                         host = "https://github.umn.edu/api/v3")
+devtools::install_github("JustinKracht/noisemaker")
 ```
 
 ## Example

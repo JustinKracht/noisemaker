@@ -26,7 +26,7 @@ Imports:
     sem (>= 3.1-11)
 RoxygenNote: 7.1.1
 Suggests: 
-    covr,
+    covr (>= 3.5.1),
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
