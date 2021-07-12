@@ -2,7 +2,8 @@
 #'
 #' This is the objective function that is minimized by the `tkl()` function.
 #'
-#' @param par (vector) Values of model error variance (\eqn{\upsilon}) and epsilon (\eqn{\epsilon}).
+#' @param par (vector) Values of model error variance (\eqn{\upsilon}) and
+#'   epsilon (\eqn{\epsilon}).
 #' @param Rpop (matrix) The model-implied correlation matrix.
 #' @param W (matrix) Matrix of provisional minor common factor loadings with
 #'   unit column variances.
@@ -17,10 +18,11 @@
 #' @param WmaxLoading (scalar) Threshold value for `NWmaxLoading`.
 #' @param NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
 #'   `WmaxLoading` in any column of `W`.
-#' @param penalty (scalar) Large (positive) penalty value to apply if the NWmaxLoading condition is violated.
+#' @param penalty (scalar) Large (positive) penalty value to apply if the
+#'   NWmaxLoading condition is violated.
 #' @param return_values (boolean) If `TRUE`, return the objective function value
-#'   along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If `FALSE`, return
-#'   only the objective function value.
+#'   along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If
+#'   `FALSE`, return only the objective function value.
 
 obj_func <- function(par = c(v, eps),
                      Rpop, W, p, u, df,
@@ -48,7 +50,8 @@ obj_func <- function(par = c(v, eps),
 
   # ML objective function value for the full model
   # Adapted from simFA() (lines 651--660)
-  Ft <- log(det(Rpop)) - log(det(RpopME)) + sum(diag(RpopME %*% solve(Rpop))) - p
+  Ft <- log(det(Rpop)) - log(det(RpopME)) +
+    sum(diag(RpopME %*% solve(Rpop))) - p
 
   # ML objective function value for the baseline (independence) model
   Fb <- -log(det(RpopME))

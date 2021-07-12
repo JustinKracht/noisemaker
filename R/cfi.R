@@ -35,7 +35,8 @@ cfi <- function(Sigma, Omega) {
   }
 
   p <- nrow(Sigma)
-  Ft <- log(det(Omega)) - log(det(Sigma)) + sum(diag(Sigma %*% solve(Omega))) - p
+  Ft <- log(det(Omega)) - log(det(Sigma)) +
+    sum(diag(Sigma %*% solve(Omega))) - p
   cfi <- 1 - (Ft / -log(det(Sigma)))
   cfi
 }

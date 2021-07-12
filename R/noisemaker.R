@@ -15,7 +15,8 @@
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
 #'   arguments. See the `tkl()` help file for more details.
 #'
-#' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL parameters (if applicable).
+#' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
+#'   parameters (if applicable).
 #' @export
 #'
 #' @examples
