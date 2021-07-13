@@ -27,7 +27,17 @@
 #'   large. Based on experience, the method tends to give solutions with RMSEA
 #'   values that are larger than the target RMSEA values. Therefore, it might be
 #'   worth using a target RMSEA value that is somewhat lower than what is
-#'   actually needed.
+#'   actually needed. Alternatively, the \code{\link{find_wb_coef}} function can
+#'   be used to estimate a coefficient to shrink the target RMSEA value by an
+#'   appropriate amount so that the solution RMSEA values are close to the
+#'   (nominal) target values.
+#'
+#' @examples
+#' set.seed(42)
+#' mod <- fungible::simFA(Seed = 42)
+#' wb_coef <- find_wb_coef(mod, n = 100, values = 5,
+#'                         lower = 0.04, upper = 0.06)
+#' wb(Omega = mod$Rpop, target_rmsea = 0.05, wb_coef = wb_coef)
 
 wb <- function(Omega,
                target_rmsea,

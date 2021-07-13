@@ -25,7 +25,8 @@ noisemaker(
 arguments. See the \code{tkl()} help file for more details.}
 }
 \value{
-A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL parameters (if applicable).
+A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
+parameters (if applicable).
 }
 \description{
 This tool lets the user generate a population correlation matrix with model
@@ -37,11 +38,8 @@ procedure finds a solution that produces RMSEA and/or CFI values that are
 close to the user-specified values.
 }
 \examples{
-library(fungible)
-library(noisemaker)
-
 set.seed(42)
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 noisemaker(mod, method = "TKL",
            target_rmsea = 0.05,
            target_cfi = 0.95,

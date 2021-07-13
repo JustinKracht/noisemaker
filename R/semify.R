@@ -5,7 +5,7 @@
 #' @export
 #'
 #' @examples
-#' ex_mod <- fungible::simFA()
+#' ex_mod <- fungible::simFA(Seed = 42)
 #' semify(mod = ex_mod)
 semify <- function(mod) {
   L <- mod$loadings
@@ -59,7 +59,7 @@ semify <- function(mod) {
   # Specify observed variable variances
   obs_var_spec <- ""
   obs_var <- numeric(length = nrow(L))
-  obs_var_names <- paste0("psi", 1:nrow(L))
+  obs_var_names <- paste0("psi", seq_len(nrow(L)))
   for (item in seq_len(nrow(L))) {
     obs_var_spec <- paste0(
       obs_var_spec, "V", item, " <-> ", "V", item, ", psi", item, ", ",

@@ -16,5 +16,8 @@ Generate a population correlation matrix using the model described in Cudeck
 and Browne (1992).
 }
 \references{
-Cudeck, R., & Browne, M. W. (1992). Constructing a covariance matrix that yields a specified minimizer and a specified minimum discrepancy function value. \emph{Psychometrika}, \emph{57}(3), 357–369. \url{https://doi.org/10/cq6ckd}
+Cudeck, R., & Browne, M. W. (1992). Constructing a covariance
+matrix that yields a specified minimizer and a specified minimum
+discrepancy function value. \emph{Psychometrika}, \emph{57}(3), 357–369.
+\url{https://doi.org/10/cq6ckd}
 }

@@ -21,7 +21,8 @@ obj_func(
 )
 }
 \arguments{
-\item{par}{(vector) Values of model error variance (\eqn{\upsilon}) and epsilon (\eqn{\epsilon}).}
+\item{par}{(vector) Values of model error variance (\eqn{\upsilon}) and
+epsilon (\eqn{\epsilon}).}
 
 \item{Rpop}{(matrix) The model-implied correlation matrix.}
 
@@ -47,11 +48,12 @@ indices; \code{c(1,0)} ignores the CFI value.}
 \item{NWmaxLoading}{(scalar) Maximum number of absolute loadings \eqn{\ge}
 \code{WmaxLoading} in any column of \code{W}.}
 
-\item{penalty}{(scalar) Large (positive) penalty value to apply if the NWmaxLoading condition is violated.}
+\item{penalty}{(scalar) Large (positive) penalty value to apply if the
+NWmaxLoading condition is violated.}
 
 \item{return_values}{(boolean) If \code{TRUE}, return the objective function value
-along with \code{Rpop}, \code{RpopME}, \code{W}, \code{RMSEA}, \code{CFI}, \code{v}, and \code{eps} values. If \code{FALSE}, return
-only the objective function value.}
+along with \code{Rpop}, \code{RpopME}, \code{W}, \code{RMSEA}, \code{CFI}, \code{v}, and \code{eps} values. If
+\code{FALSE}, return only the objective function value.}
 }
 \description{
 This is the objective function that is minimized by the \code{tkl()} function.

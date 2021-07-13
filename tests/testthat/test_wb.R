@@ -1,12 +1,11 @@
 # Tests for wb()
 
-set.seed(42)
-library(noisemaker)
-library(fungible)
-
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 Omega <- mod$Rpop
+
+set.seed(42)
 Sigma <- wb(target_rmsea = 0.05, Omega)
+wb_coef <- find_wb_coef(mod, n = 100, values = 10, lower = 0.045, upper = 0.055)
 
 # Load an indefinite matrix (BadRBY) and create a non-symmetric matrix
 data(BadRBY, package = "fungible")
@@ -34,6 +33,12 @@ test_that("Function output has the expected dimension and type", {
   expect_false(any(abs(Sigma) > 1))
 })
 
+test_that("Function works when wb_coef is specified.", {
+  expect_error(wb(Omega = Omega, target_rmsea = 0.05, wb_coef = -0.1))
+  expect_lte(abs(rmsea(wb(Omega, target_rmsea = 0.05, wb_coef = wb_coef),
+                       Omega, k = ncol(mod$loadings)) - 0.05), 0.01)
+})
+
 test_that("RMSEA value is in the ballpark of the target RMSEA value", {
-  expect_true(abs(rmsea(Sigma, Omega, k = 3) - 0.05) < 0.1)
+  expect_lte(abs(rmsea(Sigma, Omega, k = ncol(mod$loadings)) - 0.05), .1)
 })

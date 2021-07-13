@@ -4,7 +4,7 @@ set.seed(42)
 library(noisemaker)
 library(fungible)
 
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 Sigma <- tkl(mod, target_rmsea = 0.05, target_cfi = 0.95)
 
 test_that("Errors are thrown when invalid target RMSEA or CFI values are given", {

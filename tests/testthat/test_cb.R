@@ -3,7 +3,7 @@
 set.seed(42)
 library(noisemaker)
 
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 Sigma <- cb(mod, target_rmsea = 0.05)
 Omega <- mod$Rpop
 

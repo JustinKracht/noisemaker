@@ -27,11 +27,9 @@ where \eqn{p} is the number of items and \eqn{k} is the number of major
 factors.
 }
 \examples{
-library(fungible)
-library(noisemaker)
-
 set.seed(42)
-mod <- fungible::simFA(Model = list(NFac = 3))
+mod <- fungible::simFA(Model = list(NFac = 3),
+                       Seed = 42)
 Omega <- mod$Rpop
 Sigma <- noisemaker(
   mod = mod,

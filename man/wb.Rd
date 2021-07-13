@@ -4,12 +4,16 @@
 \alias{wb}
 \title{Wu & Browne model error method}
 \usage{
-wb(Omega, target_rmsea)
+wb(Omega, target_rmsea, wb_coef = NULL)
 }
 \arguments{
 \item{Omega}{(matrix) Model-implied population correlation matrix.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
+
+\item{wb_coef}{(scalar) An optional coefficient to scale the target_rmsea
+value so that generated matrices are more likely to have RMSEA values close
+to the target value. See also \code{find_wb_coef()}.}
 }
 \description{
 Generate a population correlation matrix using the model described in Wu and
@@ -21,19 +25,29 @@ error (\eqn{\Sigma}) using
 
 \deqn{(\Sigma | \Omega) ~ IW(m, m \Omega),}
 
-where \eqn{m ~= 1/\epsilon^2} is a precision parameter related to
-RMSEA (\eqn{\epsilon}) and \eqn{IW(m, m \Omega)} denotes an
-inverse Wishart distribution. Note that \emph{there is no guarantee that
-the RMSEA will be very close to the target RMSEA}, particularly when the
-target RMSEA value is large. Based on experience, the method tends to give
-solutions with RMSEA values that are larger than the target RMSEA values.
-Therefore, it might be worth using a target RMSEA value that is somewhat
-lower than what is actually needed.
+where \eqn{m ~= 1/\epsilon^2} is a precision parameter related to RMSEA
+(\eqn{\epsilon}) and \eqn{IW(m, m \Omega)} denotes an inverse Wishart
+distribution. Note that \emph{there is no guarantee that the RMSEA will be very
+close to the target RMSEA}, particularly when the target RMSEA value is
+large. Based on experience, the method tends to give solutions with RMSEA
+values that are larger than the target RMSEA values. Therefore, it might be
+worth using a target RMSEA value that is somewhat lower than what is
+actually needed. Alternatively, the \code{\link{find_wb_coef}} function can
+be used to estimate a coefficient to shrink the target RMSEA value by an
+appropriate amount so that the solution RMSEA values are close to the
+(nominal) target values.
+}
+\examples{
+set.seed(42)
+mod <- fungible::simFA(Seed = 42)
+wb_coef <- find_wb_coef(mod, n = 100, values = 5,
+                        lower = 0.04, upper = 0.06)
+wb(Omega = mod$Rpop, target_rmsea = 0.05, wb_coef = wb_coef)
 }
 \references{
 Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in
-a covariance structure as a random effect. \emph{Psychometrika},
-\emph{80}(3), 571–600. \url{https://doi.org/10/gjrkc4}
+a covariance structure as a random effect. \emph{Psychometrika}, \emph{80}(3),
+571–600. \url{https://doi.org/10/gjrkc4}
 }
 \author{
 Justin Kracht \href{mailto:krach018@umn.edu}{krach018@umn.edu}

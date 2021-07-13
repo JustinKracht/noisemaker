@@ -79,9 +79,16 @@ tkl <- function(mod,
   tkl_ctrl_default[names(tkl_ctrl)] <- tkl_ctrl
 
   # Create objects for each of the elements in tkl_ctrl
-  for (i in seq_along(tkl_ctrl_default)) {
-    assign(names(tkl_ctrl_default[i]), tkl_ctrl_default[[i]])
-  }
+  weights <- tkl_ctrl_default$weights
+  v_start <- tkl_ctrl_default$v_start
+  eps_start <- tkl_ctrl_default$eps_start
+  NMinorFac <- tkl_ctrl_default$NMinorFac
+  WmaxLoading <- tkl_ctrl_default$WmaxLoading
+  NWmaxLoading <- tkl_ctrl_default$NWmaxLoading
+  debug <- tkl_ctrl_default$debug
+  penalty <- tkl_ctrl_default$penalty
+  optim_type <- tkl_ctrl_default$optim_type
+  ncores <- tkl_ctrl_default$ncores
 
   # Check arguments
   if (!is.null(target_rmsea)) {
@@ -178,7 +185,6 @@ tkl <- function(mod,
   df <- (p * (p - 1) / 2) - (p * k) + (k * (k - 1) / 2) # model df
 
   # TODO: Feasibility check
-  # delta <- target_rmsea - (1 - target_cfi)
 
   start_vals <- c(v_start, eps_start)
 

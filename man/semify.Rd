@@ -13,6 +13,6 @@ semify(mod)
 Generate an sem model from a simFA model object
 }
 \examples{
-ex_mod <- fungible::simFA()
+ex_mod <- fungible::simFA(Seed = 42)
 semify(mod = ex_mod)
 }

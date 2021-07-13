@@ -20,11 +20,8 @@
 #' @export
 #'
 #' @examples
-#' library(fungible)
-#' library(noisemaker)
-#'
 #' set.seed(42)
-#' mod <- fungible::simFA()
+#' mod <- fungible::simFA(Seed = 42)
 #' noisemaker(mod, method = "TKL",
 #'            target_rmsea = 0.05,
 #'            target_cfi = 0.95,

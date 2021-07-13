@@ -2,6 +2,7 @@
 
 export(cb)
 export(cfi)
+export(find_wb_coef)
 export(noisemaker)
 export(rmsea)
 export(semify)

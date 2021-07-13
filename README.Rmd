@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Codecov test coverage](https://codecov.io/gh/JustinKracht/noisemaker/branch/main/graph/badge.svg)](https://codecov.io/gh/JustinKracht/noisemaker?branch=main)
-[![check-standard](https://github.com/JustinKracht/noisemaker/workflows/check-standard/badge.svg)](https://github.com/JustinKracht/noisemaker/actions)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of noisemaker is to provide functions to make it easy to generate population correlation matrices that fit a common factor analysis model imperfectly. In particular, the `noisemaker()` function provides an interface to three methods for generating population correlation matrices with RMSEA and/or CFI values that are close to user-specified target values.

@@ -19,11 +19,9 @@
 #' @export
 #'
 #' @examples
-#' library(fungible)
-#' library(noisemaker)
-#'
 #' set.seed(42)
-#' mod <- fungible::simFA(Model = list(NFac = 3))
+#' mod <- fungible::simFA(Model = list(NFac = 3),
+#'                        Seed = 42)
 #' Omega <- mod$Rpop
 #' Sigma <- noisemaker(
 #'   mod = mod,
@@ -31,6 +29,7 @@
 #'   target_rmsea = 0.05
 #' )$Sigma
 #' rmsea(Sigma, Omega, k = 3)
+
 rmsea <- function(Sigma, Omega, k) {
   if (!is.matrix(Sigma) | !is.matrix(Omega)) {
     stop("Sigma and Omega must be matrices.", call. = F)
