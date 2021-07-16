@@ -14,6 +14,10 @@
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
 #'   arguments. See the `tkl()` help file for more details.
+#' @param wb_coef wb_coef (scalar) When using the WB method, this is an optional
+#'   coefficient to scale the target_rmsea value so that generated matrices are
+#'   more likely to have RMSEA values close to the target value. See also
+#'   `find_wb_coef()`.
 #'
 #' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
 #'   parameters (if applicable).
@@ -35,7 +39,8 @@ noisemaker <- function(mod,
                        method = c("TKL", "CB", "WB"),
                        target_rmsea = 0.05,
                        target_cfi = NULL,
-                       tkl_ctrl = list()) {
+                       tkl_ctrl = list(),
+                       wb_coef = NULL) {
 
   if (is.null(target_rmsea) & is.null(target_cfi)) {
     stop("Either target RMSEA or target CFI must be specified.",
@@ -95,7 +100,8 @@ noisemaker <- function(mod,
 
   if (method == "WB") {
     out_list$Sigma <- wb(target_rmsea = target_rmsea,
-                         Omega = mod$Rpop)
+                         Omega = mod$Rpop,
+                         wb_coef = wb_coef)
     out_list$rmsea <- rmsea(out_list$Sigma, mod$Rpop, k)
     out_list$cfi <- cfi(out_list$Sigma, mod$Rpop)
   } else if (method == "CB") {
