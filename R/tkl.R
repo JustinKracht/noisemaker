@@ -185,32 +185,46 @@ tkl <- function(mod,
   df <- (p * (p - 1) / 2) - (p * k) + (k * (k - 1) / 2) # model df
 
   # TODO: Feasibility check
-
   start_vals <- c(v_start, eps_start)
 
   if (optim_type == "optim") {
     if (debug == TRUE) ctrl <- list(trace = 5, REPORT = 1) else ctrl <- list()
-    opt <- stats::optim(
-      par = start_vals,
-      fn = obj_func,
-      method = "L-BFGS-B",
-      lower = c(0, 0), # can't go lower than zero;
-      upper = c(1, 1), # can't go higher than one
-      Rpop = Rpop,
-      W = W,
-      p = p,
-      u = u,
-      df = df,
-      target_rmsea = target_rmsea,
-      target_cfi = target_cfi,
-      weights = weights,
-      WmaxLoading = WmaxLoading,
-      NWmaxLoading = NWmaxLoading,
-      control = ctrl,
-      penalty = penalty
+    opt <- NULL
+
+    # Try optim(); if it fails, then use GA instead
+    tryCatch(
+      {
+        opt <- stats::optim(
+          par = start_vals,
+          fn = obj_func,
+          method = "L-BFGS-B",
+          lower = c(0, 0), # can't go lower than zero;
+          upper = c(1, 1), # can't go higher than one
+          Rpop = Rpop,
+          W = W,
+          p = p,
+          u = u,
+          df = df,
+          target_rmsea = target_rmsea,
+          target_cfi = target_cfi,
+          weights = weights,
+          WmaxLoading = WmaxLoading,
+          NWmaxLoading = NWmaxLoading,
+          control = ctrl,
+          penalty = penalty
+        )
+        par <- opt$par
+      },
+      error = function(e) NULL
     )
-    par <- opt$par
-  } else if (optim_type == "ga") {
+    if (is.null(opt) | opt$convergence != 0) {
+      optim_type <- "ga"
+      warning("`optim()` failed to converge, using `ga()` instead.",
+              call. = FALSE)
+    }
+  }
+
+  if (optim_type == "ga") {
     opt <- GA::ga(
       type = "real-valued",
       fitness = function(x) {
