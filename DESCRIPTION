@@ -26,7 +26,10 @@ Imports:
     sem (>= 3.1-11)
 RoxygenNote: 7.1.1
 Suggests: 
+    knitr,
     covr (>= 3.5.1),
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    rmarkdown
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
+VignetteBuilder: knitr

@@ -32,10 +32,21 @@ cb <- function(mod,
   df <- (p * (p - 1) / 2) - (p * k) + (k * (k - 1) / 2)
   discrep <- target_rmsea^2 * df
   sem_mod <- semify(mod)
-  MBESS::Sigma.2.SigmaStar(
+
+  Sigma <- MBESS::Sigma.2.SigmaStar(
     model = sem_mod$model,
     model.par = sem_mod$theta,
     latent.var = sem_mod$latent_var,
     discrep = discrep
   )$Sigma.star
+
+  # Check positive definiteness
+  lambda_min <- min(eigen(Sigma, symmetric = TRUE, only.values = TRUE)$values)
+  if (lambda_min < 0) {
+    stop("Sigma is indefinite.\n",
+         crayon::cyan("\u2139"), " The minimum eigenvalue is ",
+         round(lambda_min, 2), call. = FALSE)
+  }
+
+  Sigma
 }
