@@ -24,7 +24,8 @@
 #'   * penalty (scalar) Penalty applied to objective function if the
 #'   `NmaxLoading` condition isn't satisfied.
 #'   * optim_type (character)  Which optimization function to use, `optim` or
-#'   `ga`? `optim()` is faster, but might not converge in some cases.
+#'   `ga`? `optim()` is faster, but might not converge in some cases. If `optim`
+#'    doesn't converge, `ga` will be used as a fallback option.
 #'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
 #'   parallel. If `TRUE`, uses the maximum available number of processor cores.
 #'   If `FALSE`, does not use parallel processing. If an integer is provided,
