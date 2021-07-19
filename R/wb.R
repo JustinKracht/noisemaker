@@ -3,7 +3,7 @@
 #' Generate a population correlation matrix using the model described in Wu and
 #' Browne (2015).
 #'
-#' @param Omega (matrix) Model-implied population correlation matrix.
+#' @param mod A `fungible::simFA()` model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param wb_mod (`lm` object) An optional `lm` object used to find a target
 #'   RMSEA value that results in solutions with RMSEA values close to the
@@ -46,22 +46,21 @@
 #' set.seed(42)
 #' wb(mod$Rpop, target_rmsea = 0.05)
 
-wb <- function(Omega,
+wb <- function(mod,
                target_rmsea,
                wb_mod = NULL,
                adjust_target = TRUE) {
 
-  if (!is.matrix(Omega)) stop("Omega must be a correlation matrix.")
+  if (!(is.list(mod)) |
+      is.null(mod$loadings) |
+      is.null(mod$Phi) |
+      is.null(mod$Rpop)) {
+    stop("`mod` must be a valid `simFA()` model object.", call. = F)
+  }
   if (target_rmsea < 0 | target_rmsea > 1) {
     stop("The target RMSEA value must be a number between 0 and 1.\n",
          crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
          target_rmsea, ".", call. = F)
-  }
-  if (all.equal(Omega, t(Omega)) != TRUE) {
-    stop("Omega must be a symmetric correlation matrix.", call. = F)
-  }
-  if (any(eigen(Omega)$values < 0)) {
-    stop("Omega must be a positive semidefinite correlation matrix.", .call = F)
   }
   if (!is.null(wb_mod)) {
     if (class(wb_mod) != "lm") {
@@ -83,6 +82,12 @@ wb <- function(Omega,
 
   v <- target_rmsea^2
   m <- v^-1 # m is the precision parameter, Wu and Browne (2015), p. 576
+
+  Omega <- mod$Rpop
+  p <- nrow(Omega)
+  if (m < p) {
+    stop("Target RMSEA value is too large, try a smaller value.", call. = FALSE)
+  }
 
   Sigma <- MCMCpack::riwish(m, m * Omega)
   stats::cov2cor(Sigma)
