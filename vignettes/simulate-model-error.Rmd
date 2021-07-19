@@ -172,7 +172,7 @@ CB_m1
 
 It is important to know that not all target RMSEA values will lead to acceptable solutions. If the target RMSEA value is too large, $\Sigma$ might become indefinite and the `noisemaker()` function will give an error:
 
-```{r cb-error}
+```{r cb-error, error = TRUE}
 CB_m1 <- noisemaker(mod, method = "CB", target_rmsea = 0.5)
 ```
 

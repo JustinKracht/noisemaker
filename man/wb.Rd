@@ -4,20 +4,24 @@
 \alias{wb}
 \title{Wu & Browne model error method}
 \usage{
-wb(Omega, target_rmsea, wb_mod = NULL, adjust_target = TRUE)
+wb(mod, target_rmsea, wb_mod = NULL, adjust_target = TRUE)
 }
 \arguments{
-\item{Omega}{(matrix) Model-implied population correlation matrix.}
+\item{mod}{A \code{fungible::simFA()} model object.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 
 \item{wb_mod}{(\code{lm} object) An optional \code{lm} object used to find a target
 RMSEA value that results in solutions with RMSEA values close to the
-desired value. See also \code{get_wb_mod()}.}
+desired value. Note that if no \code{wb_mod} is provided, a model will be
+estimated at run time. If many population correlation matrices are going to
+be simulated using the same model, it will be considerably faster to
+estimate \code{wb_mod} ahead of time. See also \code{get_wb_mod()}.}
 
-\item{adjust_target}{(boolean) Should the target_rmsea value be adjusted to
-ensure that solutions have RMSEA values that are close to the provided
-target RMSEA value?}
+\item{adjust_target}{(TRUE; logical) Should the target_rmsea value be
+adjusted to ensure that solutions have RMSEA values that are close to the
+provided target RMSEA value? Defaults to TRUE and should stay there unless
+you have a compelling reason to change it.}
 }
 \description{
 Generate a population correlation matrix using the model described in Wu and
@@ -36,7 +40,7 @@ close to the target RMSEA}, particularly when the target RMSEA value is
 large. Based on experience, the method tends to give solutions with RMSEA
 values that are larger than the target RMSEA values. Therefore, it might be
 worth using a target RMSEA value that is somewhat lower than what is
-actually needed. Alternatively, the \code{\link{find_wb_coef}} function can
+actually needed. Alternatively, the \code{\link{get_wb_mod}} function can
 be used to estimate a coefficient to shrink the target RMSEA value by an
 appropriate amount so that the solution RMSEA values are close to the
 (nominal) target values.
@@ -46,7 +50,7 @@ appropriate amount so that the solution RMSEA values are close to the
 mod <- fungible::simFA()
 
 set.seed(42)
-wb(mod$Rpop, target_rmsea = 0.05)
+wb(mod, target_rmsea = 0.05)
 }
 \references{
 Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in

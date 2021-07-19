@@ -1,10 +1,10 @@
 # Test tkl()
 
-set.seed(42)
 library(noisemaker)
 library(fungible)
 
-mod <- fungible::simFA(Seed = 42)
+mod <- fungible::simFA()
+set.seed(42)
 Sigma <- tkl(mod, target_rmsea = 0.05, target_cfi = 0.95)
 
 test_that("Errors are thrown when invalid target RMSEA or CFI values are given", {
@@ -74,7 +74,8 @@ test_that("Function works when only RMSEA is specified and `optim()` is used.", 
 })
 
 test_that("Function works when only CFI is specified and `optim()` is used.", {
-  sol <- tkl(mod = mod, target_cfi = 0.95, tkl_ctrl = list(optim_type = "optim"))
+  sol <- tkl(mod = mod, target_cfi = 0.95,
+             tkl_ctrl = list(optim_type = "optim"))
   expect_equal(sol$Rpop, mod$Rpop)
   expect_equal(dim(sol$RpopME), dim(mod$Rpop))
   expect_true(abs(sol$cfi - 0.95) < 0.01)

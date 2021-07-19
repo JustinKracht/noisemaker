@@ -27,10 +27,10 @@ arguments. See the \code{tkl()} help file for more details.}
 
 \item{wb_mod}{(\code{lm} object) An optional \code{lm} object used to find a target
 RMSEA value that results in solutions with RMSEA values close to the
-desired value. See also \code{get_wb_mod()}. Note that if no \code{wb_mod} is
-provided, a model will be estimated at run time. If many population
-correlation matrices are going to be simulated using the same model, it
-will be considerably faster to estimate \code{wb_mod} ahead of time.}
+desired value. Note that if no \code{wb_mod} is provided, a model will be
+estimated at run time. If many population correlation matrices are going to
+be simulated using the same model, it will be considerably faster to
+estimate \code{wb_mod} ahead of time. See also \code{get_wb_mod()}.}
 }
 \value{
 A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
@@ -46,9 +46,9 @@ procedure finds a solution that produces RMSEA and/or CFI values that are
 close to the user-specified values.
 }
 \examples{
-set.seed(42)
-mod <- fungible::simFA(Seed = 42)
+mod <- fungible::simFA()
 
+set.seed(42)
 # Simulate a population correlation matrix using the TKL method with target
 # RMSEA and CFI values specified.
 noisemaker(mod, method = "TKL",

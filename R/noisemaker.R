@@ -110,8 +110,8 @@ noisemaker <- function(mod,
   k <- ncol(mod$loadings) # number of major factors
 
   if (method == "WB") {
-    out_list$Sigma <- wb(target_rmsea = target_rmsea,
-                         Omega = mod$Rpop,
+    out_list$Sigma <- wb(mod = mod,
+                         target_rmsea = target_rmsea,
                          wb_mod = wb_mod)
     out_list$rmsea <- rmsea(out_list$Sigma, mod$Rpop, k)
     out_list$cfi <- cfi(out_list$Sigma, mod$Rpop)

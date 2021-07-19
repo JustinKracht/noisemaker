@@ -29,9 +29,8 @@
 #' @examples
 #' set.seed(42)
 #' mod <- fungible::simFA(Seed = 42)
-#' wb_mod <- get_wb_mod(mod, n = 100, values = 5,
-#'                         lower = .045, upper = .055)
-#' wb(mod$Rpop, target_rmsea = 0.05, wb_mod = wb_mod)
+#' wb_mod <- get_wb_mod(mod)
+#' noisemaker(mod, method = "WB", target_rmsea = 0.05, wb_mod = wb_mod)
 
 get_wb_mod <- function(mod, n = 50, values = 10, lower = .01, upper = .095) {
   # Check arguments
