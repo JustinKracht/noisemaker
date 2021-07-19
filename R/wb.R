@@ -5,9 +5,16 @@
 #'
 #' @param Omega (matrix) Model-implied population correlation matrix.
 #' @param target_rmsea (scalar) Target RMSEA value.
-#' @param wb_coef (scalar) An optional coefficient to scale the target_rmsea
-#'   value so that generated matrices are more likely to have RMSEA values close
-#'   to the target value. See also `find_wb_coef()`.
+#' @param wb_mod (`lm` object) An optional `lm` object used to find a target
+#'   RMSEA value that results in solutions with RMSEA values close to the
+#'   desired value. Note that if no `wb_mod` is provided, a model will be
+#'   estimated at run time. If many population correlation matrices are going to
+#'   be simulated using the same model, it will be considerably faster to
+#'   estimate `wb_mod` ahead of time. See also `get_wb_mod()`.
+#' @param adjust_target (boolean) Should the target_rmsea value be adjusted to
+#'   ensure that solutions have RMSEA values that are close to the provided
+#'   target RMSEA value? Defaults to TRUE and should stay there unless you have
+#'   a compelling reason to change it.
 #'
 #' @author Justin Kracht <krach018@umn.edu>
 #' @references Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in
@@ -33,15 +40,16 @@
 #'   (nominal) target values.
 #'
 #' @examples
+#' # Specify a default model using simFA()
+#' mod <- fungible::simFA()
+#'
 #' set.seed(42)
-#' mod <- fungible::simFA(Seed = 42)
-#' wb_coef <- find_wb_coef(mod, n = 100, values = 5,
-#'                         lower = 0.04, upper = 0.06)
-#' wb(Omega = mod$Rpop, target_rmsea = 0.05, wb_coef = wb_coef)
+#' wb(mod$Rpop, target_rmsea = 0.05)
 
 wb <- function(Omega,
                target_rmsea,
-               wb_coef = NULL) {
+               wb_mod = NULL,
+               adjust_target = TRUE) {
 
   if (!is.matrix(Omega)) stop("Omega must be a correlation matrix.")
   if (target_rmsea < 0 | target_rmsea > 1) {
@@ -55,19 +63,25 @@ wb <- function(Omega,
   if (any(eigen(Omega)$values < 0)) {
     stop("Omega must be a positive semidefinite correlation matrix.", .call = F)
   }
-  if (!is.null(wb_coef)) {
-    if ((length(wb_coef) != 1L) | (wb_coef < 0)) {
-      stop("`wb_coef` must be a positive number.\n",
-           crayon::cyan("\u2139"), " You've specified a `wb_coef` value of ",
-           wb_coef, ".", call. = F)
+  if (!is.null(wb_mod)) {
+    if (class(wb_mod) != "lm") {
+      stop("`wb_mod` must be an object of class `lm`.", call. = F)
     }
   }
 
-  # If wb_coef is specified, multiply target RMSEA by the coefficient
-  if (!is.null(wb_coef)) target_rmsea <- wb_coef * target_rmsea
+  if (is.null(wb_mod) & (adjust_target == TRUE)) {
+    wb_mod <- get_wb_mod(mod)
+  }
+
+  # Use wb_mod to find the correct target_rmsea value to use
+  if (!is.null(wb_mod) & (adjust_target == TRUE)) {
+    target_rmsea <- stats::predict(
+      wb_mod,
+      newdata = data.frame(rmsea_medians = target_rmsea)
+    )
+  }
 
   v <- target_rmsea^2
-  # m <- 1/v + nrow(Omega) - 1
   m <- v^-1 # m is the precision parameter, Wu and Browne (2015), p. 576
 
   Sigma <- MCMCpack::riwish(m, m * Omega)

@@ -14,24 +14,35 @@
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
 #'   arguments. See the `tkl()` help file for more details.
-#' @param wb_coef wb_coef (scalar) When using the WB method, this is an optional
-#'   coefficient to scale the target_rmsea value so that generated matrices are
-#'   more likely to have RMSEA values close to the target value. See also
-#'   `find_wb_coef()`.
+#' @param wb_mod (`lm` object) An optional `lm` object used to find a target
+#'   RMSEA value that results in solutions with RMSEA values close to the
+#'   desired value. Note that if no `wb_mod` is provided, a model will be
+#'   estimated at run time. If many population correlation matrices are going to
+#'   be simulated using the same model, it will be considerably faster to
+#'   estimate `wb_mod` ahead of time. See also `get_wb_mod()`.
 #'
 #' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
 #'   parameters (if applicable).
 #' @export
 #'
 #' @examples
+#' mod <- fungible::simFA()
+#'
 #' set.seed(42)
-#' mod <- fungible::simFA(Seed = 42)
+#' # Simulate a population correlation matrix using the TKL method with target
+#' # RMSEA and CFI values specified.
 #' noisemaker(mod, method = "TKL",
 #'            target_rmsea = 0.05,
 #'            target_cfi = 0.95,
 #'            tkl_ctrl = list(optim_type = "optim"))
+#'
+#' # Simulate a population correlation matrix using the CB method with target
+#' # RMSEA value specified.
 #' noisemaker(mod, method = "CB",
 #'            target_rmsea = 0.05)
+#'
+#' # Simulation a population correlation matrix using the WB method with target
+#' # RMSEA value specified.
 #' noisemaker(mod,
 #'            method = "WB",
 #'            target_rmsea = 0.05)
@@ -40,7 +51,7 @@ noisemaker <- function(mod,
                        target_rmsea = 0.05,
                        target_cfi = NULL,
                        tkl_ctrl = list(),
-                       wb_coef = NULL) {
+                       wb_mod = NULL) {
 
   if (is.null(target_rmsea) & is.null(target_cfi)) {
     stop("Either target RMSEA or target CFI must be specified.",
@@ -101,7 +112,7 @@ noisemaker <- function(mod,
   if (method == "WB") {
     out_list$Sigma <- wb(target_rmsea = target_rmsea,
                          Omega = mod$Rpop,
-                         wb_coef = wb_coef)
+                         wb_mod = wb_mod)
     out_list$rmsea <- rmsea(out_list$Sigma, mod$Rpop, k)
     out_list$cfi <- cfi(out_list$Sigma, mod$Rpop)
   } else if (method == "CB") {

@@ -4,16 +4,20 @@
 \alias{wb}
 \title{Wu & Browne model error method}
 \usage{
-wb(Omega, target_rmsea, wb_coef = NULL)
+wb(Omega, target_rmsea, wb_mod = NULL, adjust_target = TRUE)
 }
 \arguments{
 \item{Omega}{(matrix) Model-implied population correlation matrix.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 
-\item{wb_coef}{(scalar) An optional coefficient to scale the target_rmsea
-value so that generated matrices are more likely to have RMSEA values close
-to the target value. See also \code{find_wb_coef()}.}
+\item{wb_mod}{(\code{lm} object) An optional \code{lm} object used to find a target
+RMSEA value that results in solutions with RMSEA values close to the
+desired value. See also \code{get_wb_mod()}.}
+
+\item{adjust_target}{(boolean) Should the target_rmsea value be adjusted to
+ensure that solutions have RMSEA values that are close to the provided
+target RMSEA value?}
 }
 \description{
 Generate a population correlation matrix using the model described in Wu and
@@ -38,11 +42,11 @@ appropriate amount so that the solution RMSEA values are close to the
 (nominal) target values.
 }
 \examples{
+# Specify a default model using simFA()
+mod <- fungible::simFA()
+
 set.seed(42)
-mod <- fungible::simFA(Seed = 42)
-wb_coef <- find_wb_coef(mod, n = 100, values = 5,
-                        lower = 0.04, upper = 0.06)
-wb(Omega = mod$Rpop, target_rmsea = 0.05, wb_coef = wb_coef)
+wb(mod$Rpop, target_rmsea = 0.05)
 }
 \references{
 Wu, H., & Browne, M. W. (2015). Quantifying adventitious error in

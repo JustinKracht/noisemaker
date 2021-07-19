@@ -9,7 +9,8 @@ noisemaker(
   method = c("TKL", "CB", "WB"),
   target_rmsea = 0.05,
   target_cfi = NULL,
-  tkl_ctrl = list()
+  tkl_ctrl = list(),
+  wb_mod = NULL
 )
 }
 \arguments{
@@ -23,6 +24,13 @@ noisemaker(
 
 \item{tkl_ctrl}{(list) A control list containing the following TKL-specific
 arguments. See the \code{tkl()} help file for more details.}
+
+\item{wb_mod}{(\code{lm} object) An optional \code{lm} object used to find a target
+RMSEA value that results in solutions with RMSEA values close to the
+desired value. See also \code{get_wb_mod()}. Note that if no \code{wb_mod} is
+provided, a model will be estimated at run time. If many population
+correlation matrices are going to be simulated using the same model, it
+will be considerably faster to estimate \code{wb_mod} ahead of time.}
 }
 \value{
 A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
@@ -40,12 +48,21 @@ close to the user-specified values.
 \examples{
 set.seed(42)
 mod <- fungible::simFA(Seed = 42)
+
+# Simulate a population correlation matrix using the TKL method with target
+# RMSEA and CFI values specified.
 noisemaker(mod, method = "TKL",
            target_rmsea = 0.05,
            target_cfi = 0.95,
            tkl_ctrl = list(optim_type = "optim"))
+
+# Simulate a population correlation matrix using the CB method with target
+# RMSEA value specified.
 noisemaker(mod, method = "CB",
            target_rmsea = 0.05)
+
+# Simulation a population correlation matrix using the WB method with target
+# RMSEA value specified.
 noisemaker(mod,
            method = "WB",
            target_rmsea = 0.05)

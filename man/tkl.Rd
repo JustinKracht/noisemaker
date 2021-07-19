@@ -32,7 +32,8 @@ controls how common variance is distributed among the minor common factors.
 \item penalty (scalar) Penalty applied to objective function if the
 \code{NmaxLoading} condition isn't satisfied.
 \item optim_type (character)  Which optimization function to use, \code{optim} or
-\code{ga}? \code{optim()} is faster, but might not converge in some cases.
+\code{ga}? \code{optim()} is faster, but might not converge in some cases. If \code{optim}
+doesn't converge, \code{ga} will be used as a fallback option.
 \item ncores (boolean/scalar) Controls whether \code{ga()} optimization is done in
 parallel. If \code{TRUE}, uses the maximum available number of processor cores.
 If \code{FALSE}, does not use parallel processing. If an integer is provided,
