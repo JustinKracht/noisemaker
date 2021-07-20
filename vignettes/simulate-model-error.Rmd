@@ -28,12 +28,12 @@ $$
 
 \noindent where $\Lambda$ is a $p \times m$ matrix of factor-pattern coefficients, $\Phi$ is a $m \times m$ matrix of correlations between latent factors, and $\Psi$ is a $p \times p$ diagonal matrix of unique factor-pattern coefficients.
 
-Though this model is often useful, it is implausible that a simple common factor model will perfectly fit a population correlation matrix for any set of real variables. Therefore, population correlation matrices that have a degree of misfit with the model-implied correlation matrix are more representative of empirical data. A few methods have been proposed to generate population correlation matrices with model error (i.e., that do not perfectly fit a particular factor model). Though these methods differ, they all involve finding a symmetric, positive-definite matrix $\mathbf{E}$ such that
+Though this model is often useful, it is implausible that a simple common factor model will perfectly fit a population correlation matrix for any set of real variables. Therefore, population correlation matrices that have a degree of misfit with the model-implied correlation matrix are more representative of empirical data. A few methods have been proposed to generate population correlation matrices with model error (i.e., that do not perfectly fit a particular factor model). Though these methods differ, they all involve finding a symmetric, positive semidefinite population correlation matrix, $\Sigma$, such that
 
 $$
-\Sigma = \Omega + \mathbf{E},
+\Sigma - \Omega = \mathbf{E}
 $$
-\noindent where $\Sigma$ is a population correlation matrix with model error.
+\noindent where $\mathfb{E}$ is a non-null error matrix.
 
 The *noisemaker* package includes functions that allow users to generate population correlation matrices with user-specified fit statistics, given a particular factor model. This vignette will demonstrate how to generate $\Sigma$ matrices with user-specified root-mean-square error of approximation (RMSEA) and/or comparative fit index (CFI) values using (a) the Tucker, Koopman, and Linn (1969) method, (b) the Cudeck and Browne (1996) method, and (c) the Wu and Browne (2015) method. In the following sections, I will give examples and further details regarding how to generate population correlation matrices with model error using each of these methods.
 
@@ -183,4 +183,5 @@ In contrast to the TKL and CB methods, the WB method works by specifying a *dist
 $$
 (\Sigma | \Omega, m) \sim \textrm{IW}_p(m \Omega, m),
 $$
-where $m > p - 1$ is a user-specified precision parameter. 
+
+where $m > p - 1$ is a user-specified precision parameter. There is a useful relationship between $m$ and RMSEA such that $1/m = \varepsilon^2 + o(\varepsilon^2)$

@@ -26,7 +26,7 @@
 #' @export
 #'
 #' @examples
-#' mod <- fungible::simFA()
+#' mod <- fungible::simFA(Seed = 42)
 #'
 #' set.seed(42)
 #' # Simulate a population correlation matrix using the TKL method with target

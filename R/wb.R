@@ -41,7 +41,7 @@
 #'
 #' @examples
 #' # Specify a default model using simFA()
-#' mod <- fungible::simFA()
+#' mod <- fungible::simFA(Seed = 42)
 #'
 #' set.seed(42)
 #' wb(mod, target_rmsea = 0.05)

@@ -14,8 +14,9 @@
 #' library(fungible)
 #' library(noisemaker)
 #'
+#' mod <- fungible::simFA(Model = list(NFac = 3),
+#'                        Seed = 42)
 #' set.seed(42)
-#' mod <- fungible::simFA(Model = list(NFac = 3))
 #' Omega <- mod$Rpop
 #' Sigma <- noisemaker(
 #'   mod = mod,

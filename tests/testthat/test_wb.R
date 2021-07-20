@@ -1,6 +1,6 @@
 # Tests for wb()
 
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 Omega <- mod$Rpop
 
 set.seed(42)

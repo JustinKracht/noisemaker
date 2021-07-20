@@ -1,9 +1,9 @@
 # Test cfi()
 
 library(noisemaker)
-set.seed(42)
 mod <- fungible::simFA(ModelError = list(ModelError = TRUE),
                        Seed = 42)
+set.seed(42)
 X <- fungible::rcor(5)
 Y <- fungible::rcor(6)
 Z <- Y
