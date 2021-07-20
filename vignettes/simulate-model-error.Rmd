@@ -16,6 +16,8 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(noisemaker)
+library(fungible)
+library(broom)
 ```
 
 # Model Error
@@ -184,4 +186,35 @@ $$
 (\Sigma | \Omega, m) \sim \textrm{IW}_p(m \Omega, m),
 $$
 
-where $m > p - 1$ is a user-specified precision parameter. There is a useful relationship between $m$ and RMSEA such that $1/m = \varepsilon^2 + o(\varepsilon^2)$
+where $m > p - 1$ is a user-specified precision parameter. There is a useful relationship between $m$ and RMSEA such that $1/m = \varepsilon^2 + o_p(\varepsilon^2)$ (where $\varepsilon$ denotes RMSEA). Put another way, $1/m \approx \varepsilon^2$ when $m$ is large and $\varepsilon$ is small. We can take advantage of this by choosing a target RMSEA value and then solving for $m$. For instance, if our target RMSEA value is 0.05, we get $m = 0.05^{-2} = 400$. Unfortunately, this approximation does not work particularly well when the target RMSEA value is large, particularly when the number of items ($p$) is also large.
+
+The `noisemaker()` function uses a somewhat *ad hoc* solution to this problem; Given a particular model, the `get_wb_mod()` function uses the WB method to sample `n` correlation matrices from inverse Wishart distributions using $m$ values corresponding to a reasonable range of target RMSEA values (e.g., 0.02 to 0.1). For each target RMSEA value, the observed RMSEA value is calculated for each simulated correlation matrix and the median observed RMSEA value is calculated. Next, these data are used to fit the regression model
+
+$$
+\hat{\varepsilon}_{T} = b_0 + b_1 \varepsilon_{\textrm{obs}} + b_2 \varepsilon_{\textrm{obs}}^2.
+$$
+The fitted model can then be used by plugging in the target RMSEA value to find an adjusted value that will lead to solutions with RMSEA values close to the desired level.
+
+To demonstrate how this works, let's use the model we specified previously to generate a population correlation matrix using the WB method and the `noisemaker()` function. First, we'll use the `get_wb_mod()` function to get a fitted model.
+
+```{r get-wb-mod}
+wb_mod <- get_wb_mod(
+  mod,           # simFA() model specification
+  n = 50,        # Number of matrices to simulate at each target RMSEA value
+  values = 10,   # Number of target RMSEA values to test
+  lower = 0.01,  # 'lower' and 'upper' are the endpoints of the RMSEA sequence
+  upper = 0.095  
+)
+
+tidy(wb_mod)
+```
+
+Now that we have a `wb_mod`, let's use it to simulate a correlation matrix using the WB method.
+
+```{r wb-example}
+noisemaker(mod, method = "WB", target_rmsea = 0.05, wb_mod = wb_mod)
+```
+
+The observed RMSEA value isn't exactly 0.05, but it's relatively close. An important aspect of the WB method is that we're only controlling the distribution from which the correlation matrices are sampled and therefore have less fine-grained control of RMSEA compared to the CB or TKL methods.
+
+Another important note about the WB method is that if you don't provide a `wb_mod` model to the `noisemaker()` function when the "WB" method is specified, a model will be fitted when the function is called. This is convenient when you want to simulate only one correlation matrix, but will be much slower than providing a `wb_mod` if you're planning to simulate many correlation matrices using the same population factor model.
