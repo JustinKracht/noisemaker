@@ -31,7 +31,13 @@ You can install the development version from [GitHub](https://github.com/) with:
 devtools::install_github("JustinKracht/noisemaker")
 ```
 
-## Example
+To also build the vignette when the package is installed (highly recommended), you can use:
+
+```{r eval=FALSE}
+devtools::install_github("JustinKracht/noisemaker", build_vignettes = TRUE)
+```
+
+## Examples
 
 In this example, the factor model has two factors, each with three salient items. I'll demonstrate using the `noisemaker()` function to generate a population correlation matrix with model error ($\Sigma$) such that $\textrm{RMSEA}(\Sigma, \Omega) = 0.05$, where $\Omega$ is the model-implied correlation matrix. For this first example, I'll use the method described by [Cudeck and Browne (1992)](https://doi-org.ezp1.lib.umn.edu/10.1007/BF02295424).
 
@@ -39,19 +45,26 @@ In this example, the factor model has two factors, each with three salient items
 library(noisemaker)
 library(fungible)
 
-set.seed(42)
-
 # Generate a simple factor model with two factors and six items
-mod <- simFA(Model = list(NFac = 2,
-                          NItemPerFac = 3))
+mod <- simFA(Model = list(NFac = 2, NItemPerFac = 3),
+             Seed = 42)
+
 (Omega <- mod$Rpop) # the model-implied correlation matrix
+
+set.seed(42)
 
 # Generate a population correlation matrix with model error (Sigma) using the
 # Cudeck and Browne (1992) method
 noisemaker(mod, method = "CB", target_rmsea = 0.05)
 ```
 
-The `noisemaker()` function also implements a procedure that optimizes the values of the parameters for the [Tucker, Koopman, and Linn (1969)](https://doi-org.ezp1.lib.umn.edu/10.1007/BF02290601) method to produce a $\Sigma$ matrix that has both RMSEA and CFI values close to the user-specified targets:
+The `noisemaker()` function implements a method for simulating correlation matrices with RMSEA values close to a target value based on the adventitious error framework developed by [Wu and Browne (2015)](https://link-springer-com.ezp1.lib.umn.edu/article/10.1007/s11336-015-9451-3).
+
+```{r}
+noisemaker(mod, method = "WB", target_rmsea = 0.05)
+```
+
+Finally, the `noisemaker()` function implements a procedure that optimizes the values of the parameters for the [Tucker, Koopman, and Linn (1969)](https://doi-org.ezp1.lib.umn.edu/10.1007/BF02290601) method to produce a $\Sigma$ matrix that has both RMSEA and CFI values close to the user-specified targets:
 
 ```{r}
 noisemaker(mod, method = "TKL", 
