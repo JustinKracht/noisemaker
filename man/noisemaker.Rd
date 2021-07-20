@@ -46,7 +46,7 @@ procedure finds a solution that produces RMSEA and/or CFI values that are
 close to the user-specified values.
 }
 \examples{
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 
 set.seed(42)
 # Simulate a population correlation matrix using the TKL method with target

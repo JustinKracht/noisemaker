@@ -40,6 +40,6 @@ test_that("Function works when wb_mod is specified.", {
 })
 
 test_that("An error is thrown if RMSEA is too large.", {
-  expect_error(wb(Omega, target_rmsea = .35, adjust_target = FALSE))
-  expect_error(wb(Omega, target_rmsea = 1))
+  expect_error(wb(mod, target_rmsea = .35, adjust_target = FALSE))
+  expect_error(wb(mod, target_rmsea = 1))
 })

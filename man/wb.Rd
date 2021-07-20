@@ -47,7 +47,7 @@ appropriate amount so that the solution RMSEA values are close to the
 }
 \examples{
 # Specify a default model using simFA()
-mod <- fungible::simFA()
+mod <- fungible::simFA(Seed = 42)
 
 set.seed(42)
 wb(mod, target_rmsea = 0.05)

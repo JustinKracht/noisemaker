@@ -40,8 +40,8 @@ be used to predict a \code{target_rmsea} value that will give solutions with RMS
 values that are close to the desired value.
 }
 \examples{
-set.seed(42)
 mod <- fungible::simFA(Seed = 42)
+set.seed(42)
 wb_mod <- get_wb_mod(mod)
 noisemaker(mod, method = "WB", target_rmsea = 0.05, wb_mod = wb_mod)
 }
