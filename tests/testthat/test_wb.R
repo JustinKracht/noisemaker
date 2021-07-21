@@ -39,6 +39,11 @@ test_that("Function works when wb_mod is specified.", {
                        Omega, k = ncol(mod$loadings)) - 0.05), 0.01)
 })
 
+test_that("Function works when target_rmsea value is large", {
+  expect_lte(abs(rmsea(wb(mod, target_rmsea = 0.1), Omega, k = ncol(mod$loadings)) - .1),
+             0.03)
+})
+
 test_that("An error is thrown if RMSEA is too large.", {
   expect_error(wb(mod, target_rmsea = .35, adjust_target = FALSE))
   expect_error(wb(mod, target_rmsea = 1))

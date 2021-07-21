@@ -69,7 +69,12 @@ wb <- function(mod,
   }
 
   if (is.null(wb_mod) & (adjust_target == TRUE)) {
-    wb_mod <- get_wb_mod(mod)
+    if (target_rmsea >= 0.095) {
+      upper <- target_rmsea + 0.01
+    } else {
+      upper <- 0.095
+    }
+    wb_mod <- get_wb_mod(mod, upper = upper)
   }
 
   # Use wb_mod to find the correct target_rmsea value to use
