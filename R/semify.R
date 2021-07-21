@@ -42,18 +42,22 @@ semify <- function(mod) {
 
   # Specify latent variable correlations
   latent_cor_spec <- ""
-  var_pairs <- utils::combn(nrow(Phi), 2)
-  latent_cor <- numeric(length = ncol(var_pairs))
-  latent_cor_names <- character(length = ncol(var_pairs))
-  for (pair in seq_len(ncol(var_pairs))) {
-    fi <- var_pairs[1, pair]
-    fj <- var_pairs[2, pair]
-    latent_cor_spec <- paste0(
-      latent_cor_spec, "F", fi, " <-> ", "F", fj,
-      ", phi", fi, fj, ", ", Phi[fi, fj], "\n"
-    )
-    latent_cor[pair] <- Phi[fi, fj]
-    latent_cor_names[pair] <- paste0("phi", fi, fj)
+  latent_cor <- NULL
+  latent_cor_names <- NULL
+  if (ncol(L) > 1) {
+    var_pairs <- utils::combn(nrow(Phi), 2)
+    latent_cor <- numeric(length = ncol(var_pairs))
+    latent_cor_names <- character(length = ncol(var_pairs))
+    for (pair in seq_len(ncol(var_pairs))) {
+      fi <- var_pairs[1, pair]
+      fj <- var_pairs[2, pair]
+      latent_cor_spec <- paste0(
+        latent_cor_spec, "F", fi, " <-> ", "F", fj,
+        ", phi", fi, fj, ", ", Phi[fi, fj], "\n"
+      )
+      latent_cor[pair] <- Phi[fi, fj]
+      latent_cor_names[pair] <- paste0("phi", fi, fj)
+    }
   }
 
   # Specify observed variable variances
