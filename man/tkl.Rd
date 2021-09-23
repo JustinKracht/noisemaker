@@ -34,6 +34,10 @@ controls how common variance is distributed among the minor common factors.
 \item optim_type (character)  Which optimization function to use, \code{optim} or
 \code{ga}? \code{optim()} is faster, but might not converge in some cases. If \code{optim}
 doesn't converge, \code{ga} will be used as a fallback option.
+\item max_tries (numeric) How many times to restart optimization with new start
+parameter values if optimization doesn't converge?
+\item reltol (numeric) The relative convergence tolerance (when using \code{optim}).
+\item maxit (number) Maximum number of iterations to use (when using \code{optim}).
 \item ncores (boolean/scalar) Controls whether \code{ga()} optimization is done in
 parallel. If \code{TRUE}, uses the maximum available number of processor cores.
 If \code{FALSE}, does not use parallel processing. If an integer is provided,

@@ -26,6 +26,10 @@
 #'   * optim_type (character)  Which optimization function to use, `optim` or
 #'   `ga`? `optim()` is faster, but might not converge in some cases. If `optim`
 #'    doesn't converge, `ga` will be used as a fallback option.
+#'   * max_tries (numeric) How many times to restart optimization with new start
+#'   parameter values if optimization doesn't converge?
+#'   * reltol (numeric) The relative convergence tolerance (when using `optim`).
+#'   * maxit (number) Maximum number of iterations to use (when using `optim`).
 #'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
 #'   parallel. If `TRUE`, uses the maximum available number of processor cores.
 #'   If `FALSE`, does not use parallel processing. If an integer is provided,
@@ -64,14 +68,17 @@ tkl <- function(mod,
 
   # Create default tkl_ctrl list; modify elements if changed by the user
   tkl_ctrl_default <- list(weights = c(rmsea = 1, cfi = 1),
-                           v_start = 0.1,
-                           eps_start = 0.02,
+                           v_start = rbeta(n = 1, shape1 = 1, shape2 = 5),
+                           eps_start = rbeta(n = 1, shape1 = .5, shape2 = 5),
                            NMinorFac = 50,
                            WmaxLoading = NULL,
                            NWmaxLoading = 2,
                            debug = FALSE,
                            penalty = 500,
-                           optim_type = "ga",
+                           optim_type = "optim",
+                           max_tries = 5,
+                           reltol = .Machine$double.eps,
+                           maxit = 500,
                            ncores = FALSE)
 
   # Update the elements of the default tkl_ctrl list that have been changed by
@@ -185,39 +192,44 @@ tkl <- function(mod,
 
   df <- (p * (p - 1) / 2) - (p * k) + (k * (k - 1) / 2) # model df
 
-  # TODO: Feasibility check
   start_vals <- c(v_start, eps_start)
 
   if (optim_type == "optim") {
     if (debug == TRUE) ctrl <- list(trace = 5, REPORT = 1) else ctrl <- list()
-    opt <- NULL
-
     # Try optim(); if it fails, then use GA instead
-    tryCatch(
-      {
-        opt <- stats::optim(
-          par = start_vals,
-          fn = obj_func,
-          method = "L-BFGS-B",
-          lower = c(0, 0), # can't go lower than zero;
-          upper = c(1, 1), # can't go higher than one
-          Rpop = Rpop,
-          W = W,
-          p = p,
-          u = u,
-          df = df,
-          target_rmsea = target_rmsea,
-          target_cfi = target_cfi,
-          weights = weights,
-          WmaxLoading = WmaxLoading,
-          NWmaxLoading = NWmaxLoading,
-          control = ctrl,
-          penalty = penalty
-        )
-        par <- opt$par
-      },
-      error = function(e) NULL
-    )
+    opt <- NULL
+    tries <- 0
+    while (is.null(opt) & tries <= max_tries) {
+      if (tries > 1) start_vals <- c(v_start = rbeta(1, 1, 5),
+                                     eps_start = rbeta(1, .5, 5))
+      tryCatch(
+        {
+          opt <- stats::optim(
+            par = start_vals,
+            fn = obj_func,
+            method = "L-BFGS-B",
+            lower = c(0, 0), # can't go lower than zero;
+            upper = c(1, 1), # can't go higher than one
+            Rpop = Rpop,
+            W = W,
+            p = p,
+            u = u,
+            df = df,
+            target_rmsea = target_rmsea,
+            target_cfi = target_cfi,
+            weights = weights,
+            WmaxLoading = WmaxLoading,
+            NWmaxLoading = NWmaxLoading,
+            control = ctrl,
+            penalty = penalty
+          )
+          par <- opt$par
+        },
+        error = function(e) NULL
+      )
+      tries <- tries + 1
+    }
+
     if (is.null(opt) | opt$convergence != 0) {
       optim_type <- "ga"
       warning("`optim()` failed to converge, using `ga()` instead.",
