@@ -76,9 +76,9 @@ tkl <- function(mod,
                            debug = FALSE,
                            penalty = 5000,
                            optim_type = "optim",
-                           max_tries = 5,
+                           max_tries = 10,
                            reltol = .Machine$double.eps,
-                           maxit = 500,
+                           maxit = 5000,
                            ncores = FALSE)
 
   # Update the elements of the default tkl_ctrl list that have been changed by
