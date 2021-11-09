@@ -68,8 +68,8 @@ tkl <- function(mod,
 
   # Create default tkl_ctrl list; modify elements if changed by the user
   tkl_ctrl_default <- list(weights = c(rmsea = 1, cfi = 1),
-                           v_start = runif(1),
-                           eps_start = runif(1)),
+                           v_start = runif(1, 0.02, 0.9),
+                           eps_start = runif(1, 0, 0.8),
                            NMinorFac = 50,
                            WmaxLoading = NULL,
                            NWmaxLoading = 2,
@@ -201,8 +201,8 @@ tkl <- function(mod,
     opt <- NULL
     tries <- 0
     while (is.null(opt) & tries <= max_tries) {
-      if (tries > 1) start_vals <- c(v_start = runif(1),
-                                     eps_start = runif(1))
+      if (tries > 1) start_vals <- c(v_start = runif(1, 0.02, 0.9),
+                                     eps_start = runif(1, 0, 0.8))
       tryCatch(
         {
           opt <- stats::optim(
