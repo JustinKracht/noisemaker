@@ -4,7 +4,7 @@ mod <- fungible::simFA(Seed = 42)
 Omega <- mod$Rpop
 
 set.seed(42)
-Sigma <- wb(mod, target_rmsea = 0.05)
+Sigma <- wb(mod, target_rmsea = 0.05)$Sigma
 
 # Load an indefinite matrix (BadRBY) and create a non-symmetric matrix
 data(BadRBY, package = "fungible")
@@ -35,12 +35,13 @@ test_that("Function output has the expected dimension and type", {
 test_that("Function works when wb_mod is specified.", {
   wb_mod <- get_wb_mod(mod)
   expect_error(wb(mod, target_rmsea = 0.05, wb_mod = -0.1))
-  expect_lte(abs(rmsea(wb(mod, target_rmsea = 0.05, wb_mod = wb_mod),
+  expect_lte(abs(rmsea(wb(mod, target_rmsea = 0.05, wb_mod = wb_mod)$Sigma,
                        Omega, k = ncol(mod$loadings)) - 0.05), 0.01)
 })
 
 test_that("Function works when target_rmsea value is large", {
-  expect_lte(abs(rmsea(wb(mod, target_rmsea = 0.1), Omega, k = ncol(mod$loadings)) - .1),
+  expect_lte(abs(rmsea(wb(mod, target_rmsea = 0.1)$Sigma,
+                       Omega, k = ncol(mod$loadings)) - .1),
              0.03)
 })
 

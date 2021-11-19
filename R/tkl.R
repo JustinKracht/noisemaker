@@ -200,7 +200,8 @@ tkl <- function(mod,
     # Try optim(); if it fails, then use GA instead
     opt <- NULL
     tries <- 0
-    while (is.null(opt) & tries <= max_tries) {
+    converged <- FALSE
+    while (converged == FALSE & (tries <= max_tries)) {
       if (tries > 1) start_vals <- c(v_start = stats::runif(1, 0.02, 0.9),
                                      eps_start = stats::runif(1, 0, 0.8))
       tryCatch(
@@ -229,6 +230,7 @@ tkl <- function(mod,
         error = function(e) NULL
       )
       tries <- tries + 1
+      converged <- opt$convergence == 0
     }
 
     if (is.null(opt) | opt$convergence != 0) {

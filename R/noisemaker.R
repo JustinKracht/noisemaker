@@ -83,7 +83,8 @@ noisemaker <- function(mod,
     stop(
       "The TKL method must be used when a CFI value is specified.\n",
       crayon::cyan("\u2139")," You've selected the ", method," method.\n",
-      crayon::cyan("\u2139")," You've specified a target CFI value of ", target_cfi, "."
+      crayon::cyan("\u2139")," You've specified a target CFI value of ",
+      target_cfi, "."
     )
   }
   if (!(method %in% c("TKL", "WB", "CB"))) {
@@ -98,23 +99,29 @@ noisemaker <- function(mod,
     stop("`mod` must be a valid `simFA()` model object.", call. = F)
   }
   if (mod$cn$ModelError$ModelError == TRUE) {
-    warning("The `simFA()` object you provided includes model error parameters that will be ignored by this function.")
+    warning(paste0("The `simFA()` object you provided includes model error",
+                   " parameters that will be ignored by this function."))
   }
 
   out_list <- list(Sigma = NA,
                    rmsea = NA,
-                   cfi   = NA,
-                   v     = NA,
-                   eps   = NA)
+                   cfi = NA,
+                   fn_value = NA,
+                   m = NA,
+                   v = NA,
+                   eps = NA,
+                   W = NA)
 
   k <- ncol(mod$loadings) # number of major factors
 
   if (method == "WB") {
-    out_list$Sigma <- wb(mod = mod,
-                         target_rmsea = target_rmsea,
-                         wb_mod = wb_mod)
+    wb_out <- wb(mod = mod,
+              target_rmsea = target_rmsea,
+              wb_mod = wb_mod)
+    out_list$Sigma <- wb_out$Sigma
     out_list$rmsea <- rmsea(out_list$Sigma, mod$Rpop, k)
     out_list$cfi <- cfi(out_list$Sigma, mod$Rpop)
+    out_list$m <- wb_out$m
   } else if (method == "CB") {
     out_list$Sigma <- cb(mod = mod,
                          target_rmsea = target_rmsea)
@@ -131,6 +138,8 @@ noisemaker <- function(mod,
     out_list$cfi <- tkl_out$cfi
     out_list$v <- tkl_out$v
     out_list$eps <- tkl_out$eps
+    out_list$W <- tkl_out$W
+    out_list$fn_value <- tkl_out$fn_value
   }
 
   out_list

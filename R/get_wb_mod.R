@@ -74,7 +74,7 @@ get_wb_mod <- function(mod, n = 50, values = 10, lower = .01, upper = .095) {
                    Omega,
                    k) {
       obs_rmsea <- replicate(n = n, expr = {
-        rmsea(wb(mod, target_rmsea, adjust_target = FALSE), Omega, k)
+        rmsea(wb(mod, target_rmsea, adjust_target = FALSE)$Sigma, Omega, k)
       })
       stats::median(obs_rmsea)
     },

@@ -95,5 +95,6 @@ wb <- function(mod,
   }
 
   Sigma <- MCMCpack::riwish(m, m * Omega)
-  stats::cov2cor(Sigma)
+  list(Sigma = stats::cov2cor(Sigma),
+       m = m)
 }
