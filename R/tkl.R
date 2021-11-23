@@ -76,7 +76,7 @@ tkl <- function(mod,
                            debug = FALSE,
                            penalty = 5000,
                            optim_type = "optim",
-                           max_tries = 10,
+                           max_tries = 100,
                            reltol = .Machine$double.eps,
                            maxit = 5000,
                            ncores = FALSE)
