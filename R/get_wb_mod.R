@@ -57,14 +57,26 @@ get_wb_mod <- function(mod, n = 50, values = 10, lower = .01, upper = .095) {
          crayon::cyan("\u2139"), " You've specified a `lower` value of ",
          lower, ".", call. = F)
   }
-  if (length(upper) != 1L | !is.numeric(upper) | upper >= .15) {
-    stop("`upper` must be a number less than .15.\n",
+  if (length(upper) != 1L | !is.numeric(upper)) {
+    stop("`upper` must be a number.\n",
          crayon::cyan("\u2139"), " You've specified an `upper` value of ",
          upper, ".", call. = F)
   }
 
   k <- ncol(mod$loadings)
   Omega <- mod$Rpop
+  p <- nrow(Omega)
+
+  # WB requires m < p; calculate upper bound
+  # (1 / target_rmsea^2) > p means that target_rmsea < 1 / sqrt(p)
+  max_target_rmsea <- 1 / sqrt(p)
+  if (upper >= max_target_rmsea) {
+    warning("Specified upper bound was too large and was reduced.")
+    # Set new upper bound to the maximum target RMSEA, minus 5% to avoid hitting
+    # a boundary
+    upper <- max_target_rmsea - 0.05 * max_target_rmsea
+  }
+
   rmsea_values <- seq(lower, upper, length.out = values)
 
   rmsea_medians <- sapply(
