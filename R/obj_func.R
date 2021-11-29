@@ -75,8 +75,8 @@ obj_func <- function(par = c(v, eps),
   weights <- weights / sum(weights) # scale weights to sum to one
 
   # Compute objective function value
-  fn_value <- weights[1] * (rmsea - target_rmsea)^2 +
-    weights[2] * (cfi - target_cfi)^2 +
+  fn_value <- weights[1] * ((rmsea - target_rmsea)^2 / target_rmsea^2) +
+    weights[2] * (((1-cfi) - (1-target_cfi))^2 / (1-target_cfi)^2) +
     penalty * max_loading_indicator
 
   # Objective function value weights RMSEA and CFI differences equally; could be
