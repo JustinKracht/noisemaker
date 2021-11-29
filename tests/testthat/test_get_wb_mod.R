@@ -29,5 +29,9 @@ test_that("Errors are thrown when `lower` is not valid.", {
 
 test_that("Errors are thrown when `upper` is not valid.", {
   expect_error(get_wb_mod(mod, upper = NA))
-  expect_error(get_wb_mod(mod, upper = .15))
 })
+
+test_that("Warning is generated when `upper` is too large.", {
+  expect_warning(get_wb_mod(mod, upper = 1))
+})
+
