@@ -230,6 +230,7 @@ tkl <- function(mod,
         error = function(e) NULL
       )
       tries <- tries + 1
+      if (is.null(opt)) next
       converged <- opt$convergence == 0
     }
 
