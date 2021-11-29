@@ -239,7 +239,12 @@ tkl <- function(mod,
       converged <- opt$convergence == 0
     }
 
-    if (is.null(opt) | opt$convergence != 0) {
+    # If the algorithm fails to converge or produces NULL output, try GA instead
+    if (is.null(opt)) {
+      opt <- list(convergence = FALSE)
+    }
+
+    if (opt$convergence != 0) {
       optim_type <- "ga"
       warning("`optim()` failed to converge, using `ga()` instead.",
               call. = FALSE)
