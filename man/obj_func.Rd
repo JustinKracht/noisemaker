@@ -16,7 +16,7 @@ obj_func(
   weights = c(1, 1),
   WmaxLoading = NULL,
   NWmaxLoading = 2,
-  penalty = NULL,
+  penalty = 0,
   return_values = FALSE
 )
 }

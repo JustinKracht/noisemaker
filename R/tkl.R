@@ -28,7 +28,10 @@
 #'    doesn't converge, `ga` will be used as a fallback option.
 #'   * max_tries (numeric) How many times to restart optimization with new start
 #'   parameter values if optimization doesn't converge?
-#'   * reltol (numeric) The relative convergence tolerance (when using `optim`).
+#'   * factr (numeric) controls the convergence of the "L-BFGS-B" method.
+#'   Convergence occurs when the reduction in the objective is within this
+#'   factor of the machine tolerance. Default is 1e7, that is a tolerance of
+#'   about 1e-8. (when using `optim`).
 #'   * maxit (number) Maximum number of iterations to use (when using `optim`).
 #'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
 #'   parallel. If `TRUE`, uses the maximum available number of processor cores.
@@ -77,7 +80,7 @@ tkl <- function(mod,
                            penalty = 1e6,
                            optim_type = "optim",
                            max_tries = 100,
-                           reltol = .Machine$double.eps,
+                           factr = 1e6,
                            maxit = 5000,
                            ncores = FALSE)
 
@@ -98,6 +101,7 @@ tkl <- function(mod,
   optim_type <- tkl_ctrl_default$optim_type
   ncores <- tkl_ctrl_default$ncores
   max_tries <- tkl_ctrl_default$max_tries
+  factr <- tkl_ctrl_default$factr
 
   # Check arguments
   if (!is.null(target_rmsea)) {
@@ -196,7 +200,11 @@ tkl <- function(mod,
   start_vals <- c(v_start, eps_start)
 
   if (optim_type == "optim") {
-    if (debug == TRUE) ctrl <- list(trace = 5, REPORT = 1) else ctrl <- list()
+    ctrl <- list(factr = factr)
+    if (debug == TRUE) {
+      ctrl$trace <- 5
+      ctrl$REPORT <- 1
+    }
     # Try optim(); if it fails, then use GA instead
     opt <- NULL
     tries <- 0
@@ -210,7 +218,7 @@ tkl <- function(mod,
             par = start_vals,
             fn = obj_func,
             method = "L-BFGS-B",
-            lower = c(0, 0), # can't go lower than zero;
+            lower = c(0.001, 0), # can't go lower than zero
             upper = c(1, 1), # can't go higher than one
             Rpop = Rpop,
             W = W,

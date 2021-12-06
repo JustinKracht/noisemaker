@@ -25,7 +25,7 @@ Imports:
     MBESS (>= 4.8.0),
     MCMCpack (>= 1.5.0),
     sem (>= 3.1-11)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: 
     knitr,
     covr (>= 3.5.1),

@@ -23,6 +23,8 @@
 #' @param return_values (boolean) If `TRUE`, return the objective function value
 #'   along with `Rpop`, `RpopME`, `W`, `RMSEA`, `CFI`, `v`, and `eps` values. If
 #'   `FALSE`, return only the objective function value.
+#'
+#' @export
 
 obj_func <- function(par = c(v, eps),
                      Rpop, W, p, u, df,
@@ -30,7 +32,7 @@ obj_func <- function(par = c(v, eps),
                      weights = c(1, 1),
                      WmaxLoading = NULL,
                      NWmaxLoading = 2,
-                     penalty = NULL,
+                     penalty = 0,
                      return_values = FALSE) {
   v <- par[1] # error variance
   eps <- par[2] # epsTKL
@@ -75,8 +77,11 @@ obj_func <- function(par = c(v, eps),
   weights <- weights / sum(weights) # scale weights to sum to one
 
   # Compute objective function value
+  # fn_value <- weights[1] * (rmsea - target_rmsea)^2 +
+  #   weights[2] * (cfi - target_cfi)^2 +
+  #   penalty * max_loading_indicator
   fn_value <- weights[1] * ((rmsea - target_rmsea)^2 / target_rmsea^2) +
-    weights[2] * (((1-cfi) - (1-target_cfi))^2 / (1-target_cfi)^2) +
+    weights[2] * (((1 - cfi) - (1 - target_cfi))^2 / (1 - target_cfi)^2) +
     penalty * max_loading_indicator
 
   # Objective function value weights RMSEA and CFI differences equally; could be

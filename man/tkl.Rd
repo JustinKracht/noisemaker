@@ -36,7 +36,10 @@ controls how common variance is distributed among the minor common factors.
 doesn't converge, \code{ga} will be used as a fallback option.
 \item max_tries (numeric) How many times to restart optimization with new start
 parameter values if optimization doesn't converge?
-\item reltol (numeric) The relative convergence tolerance (when using \code{optim}).
+\item factr (numeric) controls the convergence of the "L-BFGS-B" method.
+Convergence occurs when the reduction in the objective is within this
+factor of the machine tolerance. Default is 1e7, that is a tolerance of
+about 1e-8. (when using \code{optim}).
 \item maxit (number) Maximum number of iterations to use (when using \code{optim}).
 \item ncores (boolean/scalar) Controls whether \code{ga()} optimization is done in
 parallel. If \code{TRUE}, uses the maximum available number of processor cores.
