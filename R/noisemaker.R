@@ -67,10 +67,12 @@ noisemaker <- function(mod,
          crayon::cyan("\u2139"), " You've specified a target CFI value of ",
          target_cfi, ".", call. = F)
   }
-  if (target_rmsea < 0 | target_rmsea > 1) {
-    stop("The target RMSEA value must be a number between 0 and 1.\n",
-         crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
-                      target_rmsea, ".", call. = F)
+  if (!is.null(target_rmsea)) {
+    if (target_rmsea < 0 | target_rmsea > 1) {
+      stop("The target RMSEA value must be a number between 0 and 1.\n",
+           crayon::cyan("\u2139"), " You've specified a target RMSEA value of ",
+           target_rmsea, ".", call. = F)
+    }
   }
   if (!is.null(target_cfi) & (method != "TKL")) {
     stop(
