@@ -7,7 +7,7 @@
 tkl(mod, target_rmsea = NULL, target_cfi = NULL, tkl_ctrl = list())
 }
 \arguments{
-\item{mod}{A \code{\link{simFA}} model object.}
+\item{mod}{A \code{\link[fungible]{simFA}} model object.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 
@@ -31,17 +31,20 @@ controls how common variance is distributed among the minor common factors.
 \code{WmaxLoading} in any column of \eqn{W}.
 \item penalty (scalar) Penalty applied to objective function if the
 \code{NmaxLoading} condition isn't satisfied.
-\item optim_type (character)  Which optimization function to use, \code{optim} or
-\code{ga}? \code{optim()} is faster, but might not converge in some cases. If \code{optim}
-doesn't converge, \code{ga} will be used as a fallback option.
+\item optim_type (character)  Which optimization function to use,
+\code{\link[stats]{optim}} or \code{\link[GA]{ga}}?
+\code{\link[stats]{optim}} is faster, but might not converge in some cases.
+If \code{\link[stats]{optim}} doesn't converge, \link[GA]{ga} will be used
+as a fallback option.
 \item max_tries (numeric) How many times to restart optimization with new start
 parameter values if optimization doesn't converge?
 \item factr (numeric) controls the convergence of the "L-BFGS-B" method.
 Convergence occurs when the reduction in the objective is within this
 factor of the machine tolerance. Default is 1e7, that is a tolerance of
-about 1e-8. (when using \code{optim}).
-\item maxit (number) Maximum number of iterations to use (when using \code{optim}).
-\item ncores (boolean/scalar) Controls whether \code{ga()} optimization is done in
+about 1e-8. (when using \code{\link[stats]{optim}}).
+\item maxit (number) Maximum number of iterations to use (when using
+\code{\link[stats]{optim}}).
+\item ncores (boolean/scalar) Controls whether \link[GA]{ga} optimization is done in
 parallel. If \code{TRUE}, uses the maximum available number of processor cores.
 If \code{FALSE}, does not use parallel processing. If an integer is provided,
 that's how many processor cores will be used (if available).
@@ -65,11 +68,12 @@ using the \code{WmaxLoading} and \code{NWmaxLoading} arguments).
 
 Optimization is fastest when the \code{optim_type = optim} optimization method
 is chosen. This indicates that optimization should be done using the
-\code{L-BFGS-B} algorithm implemented in the \code{\link{optim}} function. However, this
-method can sometimes fail to find a solution. In that case, I recommend
-setting \code{optim_type = ga}, which indicates that a genetic algorithm
-(implemented in \code{\link{GA::ga}}) will be used. This method takes longer than
-\code{\link{optim}} but is more likely to find a solution.
+\code{L-BFGS-B} algorithm implemented in the \\code{\link[stats]{optim}}
+function. However, this method can sometimes fail to find a solution.
+In that case, I recommend setting \code{optim_type = ga}, which indicates that a
+genetic algorithm (implemented in \code{\link[GA]{ga}}) will be used.
+This method takes longer than \code{\link{optim}} but is more likely to
+find a solution.
 }
 \references{
 Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation

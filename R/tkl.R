@@ -3,7 +3,7 @@
 #' Find the optimal W matrix such that the RMSEA and CFI values are as close as
 #' possible to the user-specified target values.
 #'
-#' @param mod A \code{\link{simFA}} model object.
+#' @param mod A \code{\link[fungible]{simFA}} model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
@@ -23,17 +23,20 @@
 #'   `WmaxLoading` in any column of \eqn{W}.
 #'   * penalty (scalar) Penalty applied to objective function if the
 #'   `NmaxLoading` condition isn't satisfied.
-#'   * optim_type (character)  Which optimization function to use, `optim` or
-#'   `ga`? `optim()` is faster, but might not converge in some cases. If `optim`
-#'    doesn't converge, `ga` will be used as a fallback option.
+#'   * optim_type (character)  Which optimization function to use,
+#'   \code{\link[stats]{optim}} or \code{\link[GA]{ga}}?
+#'   \code{\link[stats]{optim}} is faster, but might not converge in some cases.
+#'   If \code{\link[stats]{optim}} doesn't converge, \link[GA]{ga} will be used
+#'   as a fallback option.
 #'   * max_tries (numeric) How many times to restart optimization with new start
 #'   parameter values if optimization doesn't converge?
 #'   * factr (numeric) controls the convergence of the "L-BFGS-B" method.
 #'   Convergence occurs when the reduction in the objective is within this
 #'   factor of the machine tolerance. Default is 1e7, that is a tolerance of
-#'   about 1e-8. (when using `optim`).
-#'   * maxit (number) Maximum number of iterations to use (when using `optim`).
-#'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
+#'   about 1e-8. (when using \code{\link[stats]{optim}}).
+#'   * maxit (number) Maximum number of iterations to use (when using
+#'   \code{\link[stats]{optim}}).
+#'   * ncores (boolean/scalar) Controls whether \link[GA]{ga} optimization is done in
 #'   parallel. If `TRUE`, uses the maximum available number of processor cores.
 #'   If `FALSE`, does not use parallel processing. If an integer is provided,
 #'   that's how many processor cores will be used (if available).
@@ -52,11 +55,12 @@
 #'
 #'   Optimization is fastest when the `optim_type = optim` optimization method
 #'   is chosen. This indicates that optimization should be done using the
-#'   `L-BFGS-B` algorithm implemented in the \code{\link{optim}} function. However, this
-#'   method can sometimes fail to find a solution. In that case, I recommend
-#'   setting `optim_type = ga`, which indicates that a genetic algorithm
-#'   (implemented in \code{\link{GA::ga}}) will be used. This method takes longer than
-#'   \code{\link{optim}} but is more likely to find a solution.
+#'   `L-BFGS-B` algorithm implemented in the \\code{\link[stats]{optim}}
+#'   function. However, this method can sometimes fail to find a solution.
+#'   In that case, I recommend setting `optim_type = ga`, which indicates that a
+#'   genetic algorithm (implemented in \code{\link[GA]{ga}}) will be used.
+#'   This method takes longer than \code{\link{optim}} but is more likely to
+#'   find a solution.
 #'
 #' @export
 #' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation
