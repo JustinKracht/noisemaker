@@ -7,7 +7,7 @@
 tkl(mod, target_rmsea = NULL, target_cfi = NULL, tkl_ctrl = list())
 }
 \arguments{
-\item{mod}{A \code{fungible::simFA()} model object.}
+\item{mod}{A \code{\link{simFA}} model object.}
 
 \item{target_rmsea}{(scalar) Target RMSEA value.}
 
@@ -19,7 +19,7 @@ arguments:
 \item weights (vector) Vector of length two indicating how much weight to give
 RMSEA and CFI, e.g., \code{c(1,1)} (default) gives equal weight
 to both indices; \code{c(1,0)} ignores the CFI value.
-\item v_start (scalar) Starting value to use for \eqn{\upsilon}, the proportion
+\item v_start (scalar) Starting value to use for \eqn{\nu}, the proportion
 of uniqueness variance reallocated to the minor common factors. Note that
 only \code{v} as a proportion of the unique (not total) variance is supported
 in this function.
@@ -53,7 +53,7 @@ possible to the user-specified target values.
 }
 \details{
 This function attempts to find optimal values of the TKL parameters
-\eqn{\upsilon} and \eqn{\epsilon} such that the resulting correlation
+\eqn{\nu} and \eqn{\epsilon} such that the resulting correlation
 matrix with model error (\eqn{\Sigma}) has population RMSEA and/or CFI
 values that are close to the user-specified values. It is important to note
 that solutions are not guaranteed to produce RMSEA and CFI values that are
@@ -65,11 +65,11 @@ using the \code{WmaxLoading} and \code{NWmaxLoading} arguments).
 
 Optimization is fastest when the \code{optim_type = optim} optimization method
 is chosen. This indicates that optimization should be done using the
-\code{L-BFGS-B} algorithm implemented in the \code{optim()} function. However, this
+\code{L-BFGS-B} algorithm implemented in the \code{\link{optim}} function. However, this
 method can sometimes fail to find a solution. In that case, I recommend
 setting \code{optim_type = ga}, which indicates that a genetic algorithm
-(implemented in \code{GA::ga()}) will be used. This method takes longer than
-\code{optim()} but is more likely to find a solution.
+(implemented in \code{\link{GA::ga}}) will be used. This method takes longer than
+\code{\link{optim}} but is more likely to find a solution.
 }
 \references{
 Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation

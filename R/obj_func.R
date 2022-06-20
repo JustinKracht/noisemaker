@@ -1,8 +1,8 @@
 #' Objective function for optimizing RMSEA and CFI
 #'
-#' This is the objective function that is minimized by the `tkl()` function.
+#' This is the objective function that is minimized by the \code{\link{tkl}} function.
 #'
-#' @param par (vector) Values of model error variance (\eqn{\upsilon}) and
+#' @param par (vector) Values of model error variance (\eqn{\nu_{\textrm{e}}}) and
 #'   epsilon (\eqn{\epsilon}).
 #' @param Rpop (matrix) The model-implied correlation matrix.
 #' @param W (matrix) Matrix of provisional minor common factor loadings with

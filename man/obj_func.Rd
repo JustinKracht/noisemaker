@@ -21,7 +21,7 @@ obj_func(
 )
 }
 \arguments{
-\item{par}{(vector) Values of model error variance (\eqn{\upsilon}) and
+\item{par}{(vector) Values of model error variance (\eqn{\nu_{\textrm{e}}}) and
 epsilon (\eqn{\epsilon}).}
 
 \item{Rpop}{(matrix) The model-implied correlation matrix.}
@@ -56,5 +56,5 @@ along with \code{Rpop}, \code{RpopME}, \code{W}, \code{RMSEA}, \code{CFI}, \code
 \code{FALSE}, return only the objective function value.}
 }
 \description{
-This is the objective function that is minimized by the \code{tkl()} function.
+This is the objective function that is minimized by the \code{\link{tkl}} function.
 }

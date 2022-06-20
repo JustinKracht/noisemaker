@@ -3,7 +3,7 @@
 #' Find the optimal W matrix such that the RMSEA and CFI values are as close as
 #' possible to the user-specified target values.
 #'
-#' @param mod A `fungible::simFA()` model object.
+#' @param mod A \code{\link{simFA}} model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
@@ -11,7 +11,7 @@
 #'   * weights (vector) Vector of length two indicating how much weight to give
 #'   RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight
 #'   to both indices; `c(1,0)` ignores the CFI value.
-#'   * v_start (scalar) Starting value to use for \eqn{\upsilon}, the proportion
+#'   * v_start (scalar) Starting value to use for \eqn{\nu}, the proportion
 #'   of uniqueness variance reallocated to the minor common factors. Note that
 #'   only `v` as a proportion of the unique (not total) variance is supported
 #'   in this function.
@@ -40,7 +40,7 @@
 #' @md
 #'
 #' @details This function attempts to find optimal values of the TKL parameters
-#'   \eqn{\upsilon} and \eqn{\epsilon} such that the resulting correlation
+#'   \eqn{\nu} and \eqn{\epsilon} such that the resulting correlation
 #'   matrix with model error (\eqn{\Sigma}) has population RMSEA and/or CFI
 #'   values that are close to the user-specified values. It is important to note
 #'   that solutions are not guaranteed to produce RMSEA and CFI values that are
@@ -52,11 +52,11 @@
 #'
 #'   Optimization is fastest when the `optim_type = optim` optimization method
 #'   is chosen. This indicates that optimization should be done using the
-#'   `L-BFGS-B` algorithm implemented in the `optim()` function. However, this
+#'   `L-BFGS-B` algorithm implemented in the \code{\link{optim}} function. However, this
 #'   method can sometimes fail to find a solution. In that case, I recommend
 #'   setting `optim_type = ga`, which indicates that a genetic algorithm
-#'   (implemented in `GA::ga()`) will be used. This method takes longer than
-#'   `optim()` but is more likely to find a solution.
+#'   (implemented in \code{\link{GA::ga}}) will be used. This method takes longer than
+#'   \code{\link{optim}} but is more likely to find a solution.
 #'
 #' @export
 #' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation

@@ -13,13 +13,13 @@
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
-#'   arguments. See the `tkl()` help file for more details.
-#' @param wb_mod (`lm` object) An optional `lm` object used to find a target
+#'   arguments. See the \code{\link{tkl}} help file for more details.
+#' @param wb_mod (`lm` object) An optional \code{\link{`lm`}} object used to find a target
 #'   RMSEA value that results in solutions with RMSEA values close to the
 #'   desired value. Note that if no `wb_mod` is provided, a model will be
 #'   estimated at run time. If many population correlation matrices are going to
 #'   be simulated using the same model, it will be considerably faster to
-#'   estimate `wb_mod` ahead of time. See also `get_wb_mod()`.
+#'   estimate `wb_mod` ahead of time. See also \code{\link{get_wb_mod}}.
 #'
 #' @return A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
 #'   parameters (if applicable).

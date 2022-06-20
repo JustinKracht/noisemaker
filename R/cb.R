@@ -1,7 +1,8 @@
 #' Cudeck & Browne (1992) model error method
 #'
 #' Generate a population correlation matrix using the model described in Cudeck
-#' and Browne (1992).
+#' and Browne (1992). This function uses the implementation of the Cudeck and
+#' Browne method from Ken Kelley's MBESS package.
 #'
 #' @param mod A `fungible::simFA()` model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
@@ -10,6 +11,9 @@
 #'   matrix that yields a specified minimizer and a specified minimum
 #'   discrepancy function value. *Psychometrika*, *57*(3), 357–369.
 #'   <https://doi.org/10/cq6ckd>
+#'
+#'   Kelley, K. (2017). MBESS (Version 4.0.0 and higher)
+#'   [computer software and manual]. Accessible from http://cran.r-project.org.
 
 cb <- function(mod,
                target_rmsea) {
