@@ -55,7 +55,7 @@
 #'
 #'   Optimization is fastest when the `optim_type = optim` optimization method
 #'   is chosen. This indicates that optimization should be done using the
-#'   `L-BFGS-B` algorithm implemented in the \\code{\link[stats]{optim}}
+#'   `L-BFGS-B` algorithm implemented in the \code{\link[stats]{optim}}
 #'   function. However, this method can sometimes fail to find a solution.
 #'   In that case, I recommend setting `optim_type = ga`, which indicates that a
 #'   genetic algorithm (implemented in \code{\link[GA]{ga}}) will be used.
