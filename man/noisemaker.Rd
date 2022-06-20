@@ -14,7 +14,7 @@ noisemaker(
 )
 }
 \arguments{
-\item{mod}{A \code{fungible::simFA()} model object.}
+\item{mod}{A \code{\link[fungible]{simFA}} model object.}
 
 \item{method}{(character) Model error method to use ("TKL", "CB", or "WB").}
 
@@ -25,12 +25,12 @@ noisemaker(
 \item{tkl_ctrl}{(list) A control list containing the following TKL-specific
 arguments. See the \code{\link{tkl}} help file for more details.}
 
-\item{wb_mod}{(\code{lm} object) An optional \code{\link{`lm`}} object used to find a target
-RMSEA value that results in solutions with RMSEA values close to the
-desired value. Note that if no \code{wb_mod} is provided, a model will be
-estimated at run time. If many population correlation matrices are going to
-be simulated using the same model, it will be considerably faster to
-estimate \code{wb_mod} ahead of time. See also \code{\link{get_wb_mod}}.}
+\item{wb_mod}{(\code{lm} object) An optional \code{\link[stats]{lm}} object used
+to find a target RMSEA value that results in solutions with RMSEA values
+close to the desired value. Note that if no \code{wb_mod} is provided, a model
+will be estimated at run time. If many population correlation matrices are
+going to be simulated using the same model, it will be considerably faster
+to estimate \code{wb_mod} ahead of time. See also \code{\link{get_wb_mod}}.}
 }
 \value{
 A list containing \eqn{\Sigma}, RMSEA and CFI values, and the TKL
