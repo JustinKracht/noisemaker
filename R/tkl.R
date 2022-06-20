@@ -73,6 +73,8 @@ tkl <- function(mod,
   tkl_ctrl_default <- list(weights = c(rmsea = 1, cfi = 1),
                            v_start = stats::runif(1, 0.02, 0.9),
                            eps_start = stats::runif(1, 0, 0.8),
+                           v_bounds = c(0, 1),
+                           eps_bounds = c(0, 1),
                            NMinorFac = 50,
                            WmaxLoading = NULL,
                            NWmaxLoading = 2,
@@ -93,6 +95,8 @@ tkl <- function(mod,
   weights <- tkl_ctrl_default$weights
   v_start <- tkl_ctrl_default$v_start
   eps_start <- tkl_ctrl_default$eps_start
+  v_bounds <- tkl_ctrl_default$v_bounds
+  eps_bounds <- tkl_ctrl_default$eps_bounds
   NMinorFac <- tkl_ctrl_default$NMinorFac
   WmaxLoading <- tkl_ctrl_default$WmaxLoading
   NWmaxLoading <- tkl_ctrl_default$NWmaxLoading
@@ -126,6 +130,24 @@ tkl <- function(mod,
   }
   if (v_start < 0 | v_start > 1) {
     stop("The value of v_start must be between 0 and 1.", call. = F)
+  }
+  if ((!is.numeric(v_bounds) ) | (length(v_bounds) != 2)) {
+    stop("`v_bounds` must be a numeric vector of length two.")
+  }
+  if (v_bounds[1] < 0 | v_bounds[2] > 1) {
+    stop("The boundaries for v must be between zero and one.")
+  }
+  if (v_bounds[2] <= v_bounds[1]) {
+    stop("The first element of `v_bounds` (the lower bound) must be strictly less than the second element of `v_bounds` (the upper bound).")
+  }
+  if ((!is.numeric(eps_bounds) ) | (length(eps_bounds) != 2)) {
+    stop("`eps_bounds` must be a numeric epsector of length two.")
+  }
+  if (eps_bounds[1] < 0 | eps_bounds[2] > 1) {
+    stop("The boundaries for eps must be between zero and one.")
+  }
+  if (eps_bounds[2] <= eps_bounds[1]) {
+    stop("The first element of `eps_bounds` (the lower bound) must be strictly less than the second element of `eps_bounds` (the upper bound).")
   }
   if (!(is.list(mod)) |
       is.null(mod$loadings) |
@@ -218,8 +240,8 @@ tkl <- function(mod,
             par = start_vals,
             fn = obj_func,
             method = "L-BFGS-B",
-            lower = c(0.001, 0), # can't go lower than zero
-            upper = c(1, 1), # can't go higher than one
+            lower = c(v_bounds[1], eps_bounds[1]), # can't go lower than zero
+            upper = c(v_bounds[2], eps_bounds[2]), # can't go higher than one
             Rpop = Rpop,
             W = W,
             p = p,
