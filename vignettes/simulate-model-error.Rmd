@@ -84,9 +84,9 @@ mod$Rpop
 
 ## The Tucker, Koopman, and Linn (TKL) Method
 
-In the TKL model error method, the population correlation matrix and the model-implied correlation matrix differ due to the effects of a large number of minor common factors such that $\Sigma = \Lambda \Phi \Lambda^\prime + \Psi^2 + \mathbf{WW}^\prime$. Here, $\mathbf{W}$ denotes a $p \times q$ matrix of factor loadings for $p$ items and $q$ minor common factors. The TKL method uses two user-specified parameters, $\upsilon$ and $\epsilon$, to determine the distribution of the minor factor loadings. In `noisemaker()`, these parameters are denoted by `v` and `eps`. The `v` parameter indicates the proportion of the unique variance that was reapportioned to the minor common factors. The `eps` parameter indicates how equally the minor factor variance was distributed among the minor factors; values close to zero indicate that all of the minor common factors accounted for roughly the same amount of variance, whereas values close to one indicate that most of the variance in the minor common factors was accounted for by the first two or three minor factors.
+In the TKL model error method, the population correlation matrix and the model-implied correlation matrix differ due to the effects of a large number of minor common factors such that $\Sigma = \Lambda \Phi \Lambda^\prime + \Psi^2 + \mathbf{WW}^\prime$. Here, $\mathbf{W}$ denotes a $p \times q$ matrix of factor loadings for $p$ items and $q$ minor common factors. The TKL method uses two user-specified parameters, $\nu_{\textrm{e}}$ and $\epsilon$, to determine the distribution of the minor factor loadings. In `noisemaker()`, these parameters are denoted by `v` and `eps`. The `v` parameter indicates the proportion of the unique variance that was reapportioned to the minor common factors. The `eps` parameter indicates how equally the minor factor variance was distributed among the minor factors; values close to zero indicate that all of the minor common factors accounted for roughly the same amount of variance, whereas values close to one indicate that most of the variance in the minor common factors was accounted for by the first two or three minor factors.
 
-Traditionally, practitioners have selected $\upsilon$ and $\epsilon$ values based primarily on intuition. For instance, a practitioner might think that minor common factors account for 10% of the unique variance and therefor set $\upsilon = 0.1$. Then, $\epsilon$ is typically set to a value that gives a "reasonable" root-mean-square error of approximation (RMSEA) value. However, this method involves a lot of trial and error and can impractical when a simulation study involves many factor models. Moreover, there are no published guidelines that give an empirical basis for "reasonable" values of $\upsilon$ and $\epsilon$. The `noisemaker()` function makes it much easier to use the TKL method. In particular, the function allows users to select a target RMSEA value, a target comparative fit index (CFI) value, or both, and uses an optimization procedure to select values of $\upsilon$ and $\epsilon$ such that the solution has RMSEA and/or CFI values that are close to the target values. In the next sections, I will demonstrate how to use the TKL method with the `noisemaker()` function.
+Traditionally, practitioners have selected $\nu_{\textrm{e}}$ and $\epsilon$ values based primarily on intuition. For instance, a practitioner might think that minor common factors account for 10% of the unique variance and therefor set $\nu_{\textrm{e}} = 0.1$. Then, $\epsilon$ is typically set to a value that gives a "reasonable" root-mean-square error of approximation (RMSEA) value. However, this method involves a lot of trial and error and can impractical when a simulation study involves many factor models. Moreover, there are no published guidelines that give an empirical basis for "reasonable" values of $\nu_{\textrm{e}}$ and $\epsilon$. The `noisemaker()` function makes it much easier to use the TKL method. In particular, the function allows users to select a target RMSEA value, a target comparative fit index (CFI) value, or both, and uses an optimization procedure to select values of $\nu_{\textrm{e}}$ and $\epsilon$ such that the solution has RMSEA and/or CFI values that are close to the target values. In the next sections, I will demonstrate how to use the TKL method with the `noisemaker()` function.
 
 ### Optimizing for a Target RMSEA Value
 
@@ -151,7 +151,21 @@ TKL_m5 <-  noisemaker(mod, method = "TKL",
 TKL_m5
 ```
 
-Nothing in the output is substantially different from the previous examples, but we can be assured that no minor factor has more than two factor loadings greater than or equal to .3. Note that these restrictions can make optimization more difficult, particularly when target RMSEA values are relatively high.
+Nothing in the output is substantially different from the previous examples, but a penalty is added to the objective function to try to enforce solutions such that no minor factor has more than two factor loadings greater than 0.3 in absolute value. These restrictions can make optimization more difficult, particularly when target RMSEA values are relatively high. Moreover, the penalty provides no guarantee that the constraints on the minor factor loadings will be satisfied. In general, the constraints are likely to be violated when only a (relatively large) target RMSEA value is specified and when the input (error-free) population matrix has many factors, many items per factor, and relatively low factor loadings. On the other hand, the default constraints are much less likely to be violated if a reasonably large target CFI value is specified (e.g., CFI $> .90$).
+
+### Setting Boundaries on `v` and `eps`
+
+By default, the `tkl()` function uses a bounded optimization procedure to ensure that the values of `v` and `eps` fall between 0 and 1. Actually, the default lower boundary for `v` is 0.001 so that the optimization procedure produces a solution with at least some model error, but otherwise it is assumed that the user has no *a priori* knowledge of reasonable values of `v` and `eps`. However, `noisemaker()` allows the user to set custom bounds on `v` and `eps` in case they do have prior knowledge of reasonable parameter values. For instance, a user might consider it unlikely that the minor common factors would account for more than 20% of the unique variance. In that case, they could set the upper-bound of `v`:
+
+```{r bounds-on-v-and-eps}
+TKL_m6 <-  noisemaker(mod, method = "TKL", 
+                      target_rmsea = 0.05, 
+                      target_cfi = 0.95,
+                      tkl_ctrl = list(v_bounds = c(0, .2),
+                                      eps_bounds = c(0, 1)))
+
+TKL_m6
+```
 
 # The Cudeck and Browne (CB) Method
 
@@ -177,6 +191,10 @@ It is important to know that not all target RMSEA values will lead to acceptable
 ```{r cb-error, error = TRUE}
 CB_m1 <- noisemaker(mod, method = "CB", target_rmsea = 0.5)
 ```
+
+Another notable aspect of the CB method is that it attempts to find solutions such that if the (major factor) model is applied to the generated population correlation matrix with model error ($\Sigma$) using maximum likelihood, the vector of population parameters, $\gamma$, will minimize the objective function.[^cb-caveat] In practice, the CB method sometimes produces solution matrices that do not satisfy this requirement, particularly when major common factor loadings are relatively weak and the target RMSEA value is large.
+
+[^cb-caveat]: The same is also true when using ordinary least squares if the CB method is altered somewhat; see @cudeck1992 for details.
 
 # The Wu and Browne (WB) Method
 
