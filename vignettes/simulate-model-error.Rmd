@@ -1,6 +1,8 @@
 ---
 title: "Simulating Population Correlation Matrices with Model Error"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    tabset: true
 vignette: >
   %\VignetteIndexEntry{Simulating Population Correlation Matrices with Model Error}
   %\VignetteEngine{knitr::rmarkdown}
@@ -14,13 +16,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, include = FALSE}
 library(noisemaker)
 library(fungible)
 library(broom)
 ```
 
-# Model Error
+# Model Error {.tabset .tabset-fade .tabset-pills}
 
 The common factor model is often used in psychological research to model a correlation or covariance matrix in terms of a small number of latent factors. For instance, a $p \times p$ correlation matrix, $\Omega$, can be represented as
 
@@ -35,11 +37,11 @@ Though this model is often useful, it is implausible that a simple common factor
 $$
 \Sigma - \Omega = \mathbf{E}
 $$
-\noindent where $\mathfb{E}$ is a non-null error matrix.
+\noindent where $\mathbf{E}$ is a non-null error matrix.
 
 The *noisemaker* package includes functions that allow users to generate population correlation matrices with user-specified fit statistics, given a particular factor model. This vignette will demonstrate how to generate $\Sigma$ matrices with user-specified root-mean-square error of approximation (RMSEA) and/or comparative fit index (CFI) values using (a) the Tucker, Koopman, and Linn (1969) method, (b) the Cudeck and Browne (1996) method, and (c) the Wu and Browne (2015) method. In the following sections, I will give examples and further details regarding how to generate population correlation matrices with model error using each of these methods.
 
-## Specifying a Model
+## Specifying a Model {.tabset .tabset-fade .tabset-pills}
 
 For the purposes of this example, we will use a factor model with three latent factors and nine items. We can create this model using the `fungible::simFA()` function.
 
@@ -82,7 +84,7 @@ The model-implied correlation matrix corresponding to this model is:
 mod$Rpop
 ```
 
-## The Tucker, Koopman, and Linn (TKL) Method
+## The Tucker, Koopman, and Linn (TKL) Method {.tabset .tabset-fade .tabset-pills}
 
 In the TKL model error method, the population correlation matrix and the model-implied correlation matrix differ due to the effects of a large number of minor common factors such that $\Sigma = \Lambda \Phi \Lambda^\prime + \Psi^2 + \mathbf{WW}^\prime$. Here, $\mathbf{W}$ denotes a $p \times q$ matrix of factor loadings for $p$ items and $q$ minor common factors. The TKL method uses two user-specified parameters, $\nu_{\textrm{e}}$ and $\epsilon$, to determine the distribution of the minor factor loadings. In `noisemaker()`, these parameters are denoted by `v` and `eps`. The `v` parameter indicates the proportion of the unique variance that was reapportioned to the minor common factors. The `eps` parameter indicates how equally the minor factor variance was distributed among the minor factors; values close to zero indicate that all of the minor common factors accounted for roughly the same amount of variance, whereas values close to one indicate that most of the variance in the minor common factors was accounted for by the first two or three minor factors.
 
@@ -167,7 +169,7 @@ TKL_m6 <-  noisemaker(mod, method = "TKL",
 TKL_m6
 ```
 
-# The Cudeck and Browne (CB) Method
+# The Cudeck and Browne (CB) Method {.tabset .tabset-fade .tabset-pills}
 
 In contrast with the TKL method, the CB method is agnostic regarding how model error arises. Whereas the TKL method assumes that model error results from the influence of a large number of minor common factors, the CB method works by finding an error matrix $\mathbf{E}$ such that $\Sigma = \Omega(\gamma) + \mathbf{E}$, where $\Omega(\gamma)$ is a covariance structure model with a parameter vector $\gamma$ such that $\Omega = \Omega(\gamma_0)$ for a particular parameter vector $\gamma_0$. The CB method finds an $\mathbf{E}$ matrix such that three criteria are satisfied:
 
@@ -196,7 +198,7 @@ Another notable aspect of the CB method is that it attempts to find solutions su
 
 [^cb-caveat]: The same is also true when using ordinary least squares if the CB method is altered somewhat; see @cudeck1992 for details.
 
-# The Wu and Browne (WB) Method
+# The Wu and Browne (WB) Method {.tabset .tabset-fade .tabset-pills}
 
 In contrast to the TKL and CB methods, the WB method works by specifying a *distribution* for the population correlation matrix with model error, $\Sigma$. In particular, in the WB method $\Sigma$ follows the inverse-Wishart distribution
 
