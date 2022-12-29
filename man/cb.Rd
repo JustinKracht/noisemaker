@@ -13,11 +13,15 @@ cb(mod, target_rmsea)
 }
 \description{
 Generate a population correlation matrix using the model described in Cudeck
-and Browne (1992).
+and Browne (1992). This function uses the implementation of the Cudeck and
+Browne method from Ken Kelley's MBESS package.
 }
 \references{
 Cudeck, R., & Browne, M. W. (1992). Constructing a covariance
 matrix that yields a specified minimizer and a specified minimum
 discrepancy function value. \emph{Psychometrika}, \emph{57}(3), 357–369.
 \url{https://doi.org/10/cq6ckd}
+
+Kelley, K. (2017). MBESS (Version 4.0.0 and higher)
+\link{computer software and manual}. Accessible from http://cran.r-project.org.
 }

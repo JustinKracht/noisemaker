@@ -90,6 +90,14 @@ test_that("Function works when CFI and RMSEA are specified and `optim()` is used
   expect_true(abs(sol$rmsea - 0.05) < 0.05)
 })
 
+test_that("The bounds on v and eps are working as intended.", {
+  sol <- tkl(mod = mod, target_cfi = 0.95, target_rmsea = 0.05,
+             tkl_ctrl = list(v_bounds = c(0, .2),
+                             eps_bounds = c(0, .05)))
+  expect_true(sol$v <= .2)
+  expect_true(sol$eps <= .05)
+})
+
 test_that("Function works when CFI and RMSEA are specified and `ga()` is used with NWmaxLoading constraints.", {
   sol <- tkl(mod = mod, target_cfi = 0.95, target_rmsea = 0.05,
              tkl_ctrl = list(optim_type = "ga",

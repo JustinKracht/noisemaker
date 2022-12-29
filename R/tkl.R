@@ -3,7 +3,7 @@
 #' Find the optimal W matrix such that the RMSEA and CFI values are as close as
 #' possible to the user-specified target values.
 #'
-#' @param mod A `fungible::simFA()` model object.
+#' @param mod A \code{\link[fungible]{simFA}} model object.
 #' @param target_rmsea (scalar) Target RMSEA value.
 #' @param target_cfi (scalar) Target CFI value.
 #' @param tkl_ctrl (list) A control list containing the following TKL-specific
@@ -11,7 +11,7 @@
 #'   * weights (vector) Vector of length two indicating how much weight to give
 #'   RMSEA and CFI, e.g., `c(1,1)` (default) gives equal weight
 #'   to both indices; `c(1,0)` ignores the CFI value.
-#'   * v_start (scalar) Starting value to use for \eqn{\upsilon}, the proportion
+#'   * v_start (scalar) Starting value to use for \eqn{\nu}, the proportion
 #'   of uniqueness variance reallocated to the minor common factors. Note that
 #'   only `v` as a proportion of the unique (not total) variance is supported
 #'   in this function.
@@ -23,24 +23,27 @@
 #'   `WmaxLoading` in any column of \eqn{W}.
 #'   * penalty (scalar) Penalty applied to objective function if the
 #'   `NmaxLoading` condition isn't satisfied.
-#'   * optim_type (character)  Which optimization function to use, `optim` or
-#'   `ga`? `optim()` is faster, but might not converge in some cases. If `optim`
-#'    doesn't converge, `ga` will be used as a fallback option.
+#'   * optim_type (character)  Which optimization function to use,
+#'   \code{\link[stats]{optim}} or \code{\link[GA]{ga}}?
+#'   \code{\link[stats]{optim}} is faster, but might not converge in some cases.
+#'   If \code{\link[stats]{optim}} doesn't converge, \link[GA]{ga} will be used
+#'   as a fallback option.
 #'   * max_tries (numeric) How many times to restart optimization with new start
 #'   parameter values if optimization doesn't converge?
 #'   * factr (numeric) controls the convergence of the "L-BFGS-B" method.
 #'   Convergence occurs when the reduction in the objective is within this
 #'   factor of the machine tolerance. Default is 1e7, that is a tolerance of
-#'   about 1e-8. (when using `optim`).
-#'   * maxit (number) Maximum number of iterations to use (when using `optim`).
-#'   * ncores (boolean/scalar) Controls whether `ga()` optimization is done in
+#'   about 1e-8. (when using \code{\link[stats]{optim}}).
+#'   * maxit (number) Maximum number of iterations to use (when using
+#'   \code{\link[stats]{optim}}).
+#'   * ncores (boolean/scalar) Controls whether \link[GA]{ga} optimization is done in
 #'   parallel. If `TRUE`, uses the maximum available number of processor cores.
 #'   If `FALSE`, does not use parallel processing. If an integer is provided,
 #'   that's how many processor cores will be used (if available).
 #' @md
 #'
 #' @details This function attempts to find optimal values of the TKL parameters
-#'   \eqn{\upsilon} and \eqn{\epsilon} such that the resulting correlation
+#'   \eqn{\nu} and \eqn{\epsilon} such that the resulting correlation
 #'   matrix with model error (\eqn{\Sigma}) has population RMSEA and/or CFI
 #'   values that are close to the user-specified values. It is important to note
 #'   that solutions are not guaranteed to produce RMSEA and CFI values that are
@@ -52,11 +55,12 @@
 #'
 #'   Optimization is fastest when the `optim_type = optim` optimization method
 #'   is chosen. This indicates that optimization should be done using the
-#'   `L-BFGS-B` algorithm implemented in the `optim()` function. However, this
-#'   method can sometimes fail to find a solution. In that case, I recommend
-#'   setting `optim_type = ga`, which indicates that a genetic algorithm
-#'   (implemented in `GA::ga()`) will be used. This method takes longer than
-#'   `optim()` but is more likely to find a solution.
+#'   `L-BFGS-B` algorithm implemented in the \code{\link[stats]{optim}}
+#'   function. However, this method can sometimes fail to find a solution.
+#'   In that case, I recommend setting `optim_type = ga`, which indicates that a
+#'   genetic algorithm (implemented in \code{\link[GA]{ga}}) will be used.
+#'   This method takes longer than \code{\link{optim}} but is more likely to
+#'   find a solution.
 #'
 #' @export
 #' @references Tucker, L. R., Koopman, R. F., & Linn, R. L. (1969). Evaluation
@@ -73,6 +77,8 @@ tkl <- function(mod,
   tkl_ctrl_default <- list(weights = c(rmsea = 1, cfi = 1),
                            v_start = stats::runif(1, 0.02, 0.9),
                            eps_start = stats::runif(1, 0, 0.8),
+                           v_bounds = c(0.001, 1),
+                           eps_bounds = c(0, 1),
                            NMinorFac = 50,
                            WmaxLoading = NULL,
                            NWmaxLoading = 2,
@@ -93,6 +99,8 @@ tkl <- function(mod,
   weights <- tkl_ctrl_default$weights
   v_start <- tkl_ctrl_default$v_start
   eps_start <- tkl_ctrl_default$eps_start
+  v_bounds <- tkl_ctrl_default$v_bounds
+  eps_bounds <- tkl_ctrl_default$eps_bounds
   NMinorFac <- tkl_ctrl_default$NMinorFac
   WmaxLoading <- tkl_ctrl_default$WmaxLoading
   NWmaxLoading <- tkl_ctrl_default$NWmaxLoading
@@ -126,6 +134,24 @@ tkl <- function(mod,
   }
   if (v_start < 0 | v_start > 1) {
     stop("The value of v_start must be between 0 and 1.", call. = F)
+  }
+  if ((!is.numeric(v_bounds) ) | (length(v_bounds) != 2)) {
+    stop("`v_bounds` must be a numeric vector of length two.")
+  }
+  if (v_bounds[1] < 0 | v_bounds[2] > 1) {
+    stop("The boundaries for v must be between zero and one.")
+  }
+  if (v_bounds[2] <= v_bounds[1]) {
+    stop("The first element of `v_bounds` (the lower bound) must be strictly less than the second element of `v_bounds` (the upper bound).")
+  }
+  if ((!is.numeric(eps_bounds) ) | (length(eps_bounds) != 2)) {
+    stop("`eps_bounds` must be a numeric epsector of length two.")
+  }
+  if (eps_bounds[1] < 0 | eps_bounds[2] > 1) {
+    stop("The boundaries for eps must be between zero and one.")
+  }
+  if (eps_bounds[2] <= eps_bounds[1]) {
+    stop("The first element of `eps_bounds` (the lower bound) must be strictly less than the second element of `eps_bounds` (the upper bound).")
   }
   if (!(is.list(mod)) |
       is.null(mod$loadings) |
@@ -218,8 +244,8 @@ tkl <- function(mod,
             par = start_vals,
             fn = obj_func,
             method = "L-BFGS-B",
-            lower = c(0.001, 0), # can't go lower than zero
-            upper = c(1, 1), # can't go higher than one
+            lower = c(v_bounds[1], eps_bounds[1]), # can't go lower than zero
+            upper = c(v_bounds[2], eps_bounds[2]), # can't go higher than one
             Rpop = Rpop,
             W = W,
             p = p,
