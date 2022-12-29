@@ -25,7 +25,7 @@ only \code{v} as a proportion of the unique (not total) variance is supported
 in this function.
 \item eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
 controls how common variance is distributed among the minor common factors.
-\item NminorFac (scalar) Number of minor common factors.
+\item NMinorFac (scalar) Number of minor common factors.
 \item WmaxLoading (scalar) Threshold value for \code{NWmaxLoading}.
 \item NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
 \code{WmaxLoading} in any column of \eqn{W}.
