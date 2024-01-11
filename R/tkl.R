@@ -17,6 +17,8 @@
 #'   in this function.
 #'   * eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
 #'   controls how common variance is distributed among the minor common factors.
+#'   * v_start (vector) A vector of length two specifying the lowest and highest acceptable values of \eqn{\nu}.
+#'   * eps_start (vector) A vector of length two specifying the lowest and highest acceptable values of \eqn{\epsilon}.
 #'   * NMinorFac (scalar) Number of minor common factors.
 #'   * WmaxLoading (scalar) Threshold value for `NWmaxLoading`.
 #'   * NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}

@@ -25,6 +25,8 @@ only \code{v} as a proportion of the unique (not total) variance is supported
 in this function.
 \item eps_start (scalar) Starting value to use for \eqn{\epsilon}, which
 controls how common variance is distributed among the minor common factors.
+\item v_start (vector) A vector of length two specifying the lowest and highest acceptable values of \eqn{\nu}.
+\item eps_start (vector) A vector of length two specifying the lowest and highest acceptable values of \eqn{\epsilon}.
 \item NMinorFac (scalar) Number of minor common factors.
 \item WmaxLoading (scalar) Threshold value for \code{NWmaxLoading}.
 \item NWmaxLoading (scalar) Maximum number of absolute loadings \eqn{\ge}
@@ -68,7 +70,7 @@ using the \code{WmaxLoading} and \code{NWmaxLoading} arguments).
 
 Optimization is fastest when the \code{optim_type = optim} optimization method
 is chosen. This indicates that optimization should be done using the
-\code{L-BFGS-B} algorithm implemented in the \\code{\link[stats]{optim}}
+\code{L-BFGS-B} algorithm implemented in the \code{\link[stats]{optim}}
 function. However, this method can sometimes fail to find a solution.
 In that case, I recommend setting \code{optim_type = ga}, which indicates that a
 genetic algorithm (implemented in \code{\link[GA]{ga}}) will be used.
