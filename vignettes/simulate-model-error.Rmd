@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 ```{r setup, include = FALSE}
 library(noisemaker)
 library(fungible)
-library(broom)
 ```
 
 # Model Error
@@ -228,7 +227,7 @@ wb_mod <- get_wb_mod(
   upper = 0.095  
 )
 
-tidy(wb_mod)
+summary(wb_mod)
 ```
 
 Now that we have a `wb_mod`, let's use it to simulate a correlation matrix using the WB method.

@@ -11,9 +11,6 @@
 #' @export
 #'
 #' @examples
-#' library(fungible)
-#' library(noisemaker)
-#'
 #' mod <- fungible::simFA(Model = list(NFac = 3),
 #'                        Seed = 42)
 #' set.seed(42)

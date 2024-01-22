@@ -13,7 +13,7 @@
 #'   <https://doi.org/10/cq6ckd>
 #'
 #'   Kelley, K. (2017). MBESS (Version 4.0.0 and higher)
-#'   [computer software and manual]. Accessible from http://cran.r-project.org.
+#'   \[computer software and manual\]. Accessible from http://cran.r-project.org.
 
 cb <- function(mod,
                target_rmsea) {

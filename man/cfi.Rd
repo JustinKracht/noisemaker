@@ -18,9 +18,6 @@ Given two correlation matrices of the same dimension, calculate the CFI value
 value using the independence model as the null model.
 }
 \examples{
-library(fungible)
-library(noisemaker)
-
 mod <- fungible::simFA(Model = list(NFac = 3),
                        Seed = 42)
 set.seed(42)

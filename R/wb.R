@@ -21,6 +21,7 @@
 #'   a covariance structure as a random effect. *Psychometrika*, *80*(3),
 #'   571–600. <https://doi.org/10/gjrkc4>
 #'
+#' @importFrom methods is
 #' @export
 #' @details The Wu and Browne method generates a correlation matrix with model
 #'   error (\eqn{\Sigma}) using
@@ -63,7 +64,7 @@ wb <- function(mod,
          target_rmsea, ".", call. = F)
   }
   if (!is.null(wb_mod)) {
-    if (class(wb_mod) != "lm") {
+    if (is(wb_mod)[1] != "lm") {
       stop("`wb_mod` must be an object of class `lm`.", call. = F)
     }
   }
